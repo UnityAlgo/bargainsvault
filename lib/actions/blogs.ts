@@ -24,11 +24,12 @@ async function requireAdmin() {
 export async function createBlog(formData: FormData) {
   await requireAdmin()
 
-  const title = formData.get('title') as string
-  const content = formData.get('content') as string
-  const excerpt = formData.get('excerpt') as string
+  const title        = formData.get('title') as string
+  const content      = formData.get('content') as string
+  const excerpt      = formData.get('excerpt') as string
   const featuredImage = formData.get('featuredImage') as string
-  const featured = formData.get('featured') === 'on'
+  const metaKeywords = formData.get('metaKeywords') as string
+  const featured     = formData.get('featured') === 'on'
 
   if (!title || !content) {
     return { error: 'Title and content are required' }
@@ -40,12 +41,13 @@ export async function createBlog(formData: FormData) {
     title,
     slug,
     content,
-    excerpt: excerpt || null,
+    excerpt:      excerpt || null,
     featuredImage: featuredImage || null,
+    metaKeywords: metaKeywords || null,
     featured,
   })
 
-  revalidatePath('/')
+  revalidatePath('/', 'layout')
   revalidatePath('/blog')
   redirect('/admin/blogs')
 }
@@ -53,11 +55,12 @@ export async function createBlog(formData: FormData) {
 export async function updateBlog(id: number, formData: FormData) {
   await requireAdmin()
 
-  const title = formData.get('title') as string
-  const content = formData.get('content') as string
-  const excerpt = formData.get('excerpt') as string
+  const title        = formData.get('title') as string
+  const content      = formData.get('content') as string
+  const excerpt      = formData.get('excerpt') as string
   const featuredImage = formData.get('featuredImage') as string
-  const featured = formData.get('featured') === 'on'
+  const metaKeywords = formData.get('metaKeywords') as string
+  const featured     = formData.get('featured') === 'on'
 
   if (!title || !content) {
     return { error: 'Title and content are required' }
@@ -68,15 +71,17 @@ export async function updateBlog(id: number, formData: FormData) {
     .set({
       title,
       content,
-      excerpt: excerpt || null,
+      excerpt:      excerpt || null,
       featuredImage: featuredImage || null,
+      metaKeywords: metaKeywords || null,
       featured,
-      updatedAt: new Date(),
+      updatedAt:    new Date(),
     })
     .where(eq(blogs.id, id))
 
-  revalidatePath('/')
+  revalidatePath('/', 'layout')
   revalidatePath('/blog')
+  revalidatePath(`/blog/${(await db.select({ slug: blogs.slug }).from(blogs).where(eq(blogs.id, id)))[0]?.slug}`)
   redirect('/admin/blogs')
 }
 

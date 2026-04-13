@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { db } from '@/lib/db'
 import { stores, coupons } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
@@ -30,32 +31,53 @@ export default async function StoreVouchersPage({ params }: Props) {
     .where(eq(coupons.storeId, store.id))
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      {/* Store Header */}
-      <div className="flex items-center gap-4 mb-10">
+    <div className="max-w-3xl mx-auto px-5 py-8">
+      {/* Back */}
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-brand transition-colors mb-6"
+      >
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+          <path d="M11 7H3M7 11l-4-4 4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        All Stores
+      </Link>
+
+      {/* Store header card */}
+      <div className="bg-surface rounded-xl border border-border p-5 mb-6 flex items-center gap-4">
         {store.imageUrl ? (
-          <img
-            src={store.imageUrl}
-            alt={store.name}
-            className="w-16 h-16 object-contain rounded-xl border border-purple-100"
-          />
+          <div className="w-14 h-14 bg-page-bg rounded-xl border border-border flex items-center justify-center p-1.5 shrink-0">
+            <img src={store.imageUrl} alt={store.name} className="w-full h-full object-contain" />
+          </div>
         ) : (
-          <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center text-purple-700 font-bold text-2xl">
+          <div className="w-14 h-14 bg-brand-light rounded-xl flex items-center justify-center text-brand font-bold text-xl shrink-0">
             {store.name.charAt(0).toUpperCase()}
           </div>
         )}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{store.name} Coupons</h1>
-          <p className="text-purple-600 text-sm">{storeCoupons.length} active deal{storeCoupons.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-lg font-bold text-text tracking-tight">
+            {store.name} <span className="font-normal text-muted">Coupons</span>
+          </h1>
+          <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-semibold bg-tag-bg text-tag-text px-2.5 py-0.5 rounded-full">
+            {storeCoupons.length} deal{storeCoupons.length !== 1 ? 's' : ''} available
+          </span>
         </div>
       </div>
 
+      {/* Coupon list */}
       {storeCoupons.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
-          <p className="text-lg">No coupons available for this store yet.</p>
+        <div className="text-center py-16 bg-surface rounded-xl border border-border">
+          <div className="w-10 h-10 bg-page-bg rounded-xl flex items-center justify-center mx-auto mb-3">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-muted/50">
+              <path d="M9 14.5l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 2l2.09 4.26L19 7.27l-3.5 3.41.68 5.32L12 13.77l-4.18 2.23.68-5.32L5 7.27l4.91-1.01L12 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <p className="text-sm font-medium text-muted">No coupons available yet.</p>
+          <p className="text-xs text-muted/60 mt-1">Check back soon for fresh deals.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="stagger-grid space-y-2.5">
           {storeCoupons.map((coupon) => (
             <CouponCard key={coupon.id} coupon={coupon} />
           ))}

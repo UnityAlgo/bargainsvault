@@ -13,13 +13,25 @@ export default async function LoginPage() {
   if (session) redirect('/admin')
 
   return (
-    <div className="min-h-screen bg-purple-50 flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-purple-800">BargainsVault</h1>
-          <p className="text-gray-500 text-sm mt-1">Admin Panel</p>
+    <div className="min-h-screen bg-page-bg flex items-center justify-center px-4">
+      <div className="w-full max-w-sm animate-fade-in-up">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center w-10 h-10 bg-brand rounded-xl mb-4">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none" className="text-white">
+              <rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.6"/>
+              <circle cx="8" cy="8" r="1.8" stroke="currentColor" strokeWidth="1.4"/>
+              <path d="M8 6.2V4.5M8 11.5v-1.7M5.5 8H3.5M12.5 8h-2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+            </svg>
+          </div>
+          <h1 className="text-xl font-bold text-text tracking-tight">BargainsVault</h1>
+          <p className="text-muted text-sm mt-0.5">Admin Panel</p>
         </div>
-        <LoginForm />
+
+        {/* Card */}
+        <div className="bg-surface rounded-2xl border border-border shadow-sm p-6">
+          <LoginForm />
+        </div>
       </div>
     </div>
   )

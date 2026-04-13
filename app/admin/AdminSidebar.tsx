@@ -5,10 +5,11 @@ import { usePathname } from 'next/navigation'
 import { logout } from '@/lib/actions/auth'
 
 const navItems = [
-  { href: '/admin', label: 'Dashboard', exact: true },
-  { href: '/admin/blogs', label: 'Blogs', exact: false },
-  { href: '/admin/stores', label: 'Stores', exact: false },
-  { href: '/admin/coupons', label: 'Coupons', exact: false },
+  { href: '/admin',         label: 'Dashboard', exact: true },
+  { href: '/admin/blogs',   label: 'Blogs',     exact: false },
+  { href: '/admin/stores',  label: 'Stores',    exact: false },
+  { href: '/admin/coupons', label: 'Coupons',   exact: false },
+  { href: '/admin/users',   label: 'Users',     exact: false },
 ]
 
 export default function AdminSidebar() {

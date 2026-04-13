@@ -13,43 +13,50 @@ export default async function BlogListPage() {
   const allBlogs = await db.select().from(blogs).orderBy(desc(blogs.createdAt))
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-purple-800 mb-8">Blog</h1>
+    <div className="max-w-5xl mx-auto px-5 py-8">
+      <div className="mb-7 animate-fade-in">
+        <h1 className="text-2xl font-bold text-text tracking-tight">Blog</h1>
+        <p className="text-muted text-sm mt-1">Money-saving tips, guides, and deal-hunting strategies.</p>
+      </div>
 
       {allBlogs.length === 0 ? (
-        <p className="text-gray-500">No articles yet. Check back soon!</p>
+        <div className="text-center py-20 bg-surface rounded-xl border border-border">
+          <p className="text-sm font-medium text-muted">No articles yet. Check back soon!</p>
+        </div>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="stagger-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {allBlogs.map((blog) => (
             <Link
               key={blog.id}
               href={`/blog/${blog.slug}`}
-              className="group bg-white rounded-xl border border-purple-100 shadow-sm hover:shadow-md hover:border-purple-300 transition-all overflow-hidden"
+              className="group bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
             >
-              {blog.featuredImage && (
-                <img
-                  src={blog.featuredImage}
-                  alt={blog.title}
-                  className="w-full h-40 object-cover"
-                />
+              {blog.featuredImage ? (
+                <div className="overflow-hidden">
+                  <img
+                    src={blog.featuredImage}
+                    alt={blog.title}
+                    className="w-full h-40 object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-40 bg-linear-to-br from-brand-light to-tag-bg" />
               )}
-              <div className="p-4">
+              <div className="p-4 flex flex-col flex-1">
                 {blog.featured && (
-                  <span className="inline-block text-xs bg-purple-100 text-purple-700 font-semibold px-2 py-0.5 rounded-full mb-2">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wide uppercase bg-tag-bg text-tag-text px-2 py-0.5 rounded-full mb-2 w-fit">
                     Featured
                   </span>
                 )}
-                <h2 className="font-semibold text-gray-800 group-hover:text-purple-700 transition-colors line-clamp-2">
+                <h2 className="font-semibold text-text text-sm group-hover:text-brand transition-colors line-clamp-2 leading-snug">
                   {blog.title}
                 </h2>
                 {blog.excerpt && (
-                  <p className="text-sm text-gray-500 mt-2 line-clamp-2">{blog.excerpt}</p>
+                  <p className="text-xs text-muted mt-1.5 line-clamp-2 leading-relaxed flex-1">{blog.excerpt}</p>
                 )}
-                <p className="text-xs text-purple-500 mt-3">
+                <p className="text-[11px] text-muted/60 mt-3 font-medium">
                   {new Date(blog.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
+                    year: 'numeric', month: 'short', day: 'numeric',
                   })}
                 </p>
               </div>

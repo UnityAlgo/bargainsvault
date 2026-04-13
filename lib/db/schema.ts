@@ -29,6 +29,7 @@ export const blogs = pgTable('blogs', {
   content: text('content').notNull(),
   excerpt: text('excerpt'),
   featuredImage: text('featured_image'),
+  metaKeywords: text('meta_keywords'),
   featured: boolean('featured').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),

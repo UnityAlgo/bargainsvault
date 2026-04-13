@@ -1,29 +1,140 @@
 import Link from 'next/link'
 import { db } from '@/lib/db'
 import { coupons, stores } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { desc, ilike, eq, and, count, type SQL } from 'drizzle-orm'
 import DeleteButton from '@/app/_components/DeleteButton'
 import { deleteCoupon } from '@/lib/actions/coupons'
+import ListFilters from '../_components/ListFilters'
+import Pagination from '../_components/Pagination'
+import DataTable, { type Column } from '../_components/DataTable'
+import { Suspense } from 'react'
 
-export default async function AdminCouponsPage() {
-  const allCoupons = await db
+const PAGE_SIZE = 20
+
+interface PageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
+function str(v: string | string[] | undefined): string {
+  return Array.isArray(v) ? (v[0] ?? '') : (v ?? '')
+}
+
+export default async function AdminCouponsPage({ searchParams }: PageProps) {
+  const sp      = await searchParams
+  const q       = str(sp.q)
+  const type    = str(sp.type)     // '' | 'copy' | 'link'
+  const storeId = str(sp.store)    // '' | '<id>'
+  const page    = Math.max(1, parseInt(str(sp.page) || '1'))
+
+  // Build WHERE conditions
+  const conditions: SQL[] = []
+  if (q)                   conditions.push(ilike(coupons.title, `%${q}%`))
+  if (type === 'copy' || type === 'link') conditions.push(eq(coupons.type, type))
+  if (storeId)             conditions.push(eq(coupons.storeId, parseInt(storeId)))
+
+  const where = conditions.length ? and(...conditions) : undefined
+
+  // Get all stores for filter dropdown
+  const allStores = await db.select({ id: stores.id, name: stores.name }).from(stores).orderBy(stores.name)
+
+  const [{ total }] = await db
+    .select({ total: count() })
+    .from(coupons)
+    .where(where)
+
+  const rows = await db
     .select({
-      id: coupons.id,
-      title: coupons.title,
-      type: coupons.type,
-      code: coupons.code,
-      linkUrl: coupons.linkUrl,
+      id:        coupons.id,
+      title:     coupons.title,
+      type:      coupons.type,
+      code:      coupons.code,
+      linkUrl:   coupons.linkUrl,
       expiresAt: coupons.expiresAt,
       storeName: stores.name,
-      storeSlug: stores.slug,
     })
     .from(coupons)
     .leftJoin(stores, eq(coupons.storeId, stores.id))
+    .where(where)
+    .orderBy(desc(coupons.createdAt))
+    .limit(PAGE_SIZE)
+    .offset((page - 1) * PAGE_SIZE)
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+
+  const currentParams = Object.fromEntries(
+    Object.entries(sp)
+      .filter(([, v]) => v !== undefined)
+      .map(([k, v]) => [k, str(v)])
+      .filter(([k]) => k !== 'page')
+  )
+
+  type Row = typeof rows[number]
+
+  const columns: Column<Row>[] = [
+    {
+      header: 'Title',
+      cell: row => <span className="font-medium text-gray-800">{row.title}</span>,
+    },
+    {
+      header: 'Store',
+      headerClassName: 'w-32',
+      cellClassName: 'w-32 text-gray-600',
+      cell: row => row.storeName ?? '—',
+    },
+    {
+      header: 'Type',
+      headerClassName: 'w-28',
+      cellClassName: 'w-28',
+      cell: row => (
+        <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${
+          row.type === 'copy' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+        }`}>
+          {row.type === 'copy' ? 'Copy Code' : 'Direct Link'}
+        </span>
+      ),
+    },
+    {
+      header: 'Code / URL',
+      headerClassName: 'w-40',
+      cellClassName: 'w-40',
+      cell: row => (
+        <span className="font-mono text-xs text-gray-500 truncate block max-w-40">
+          {row.type === 'copy' ? (row.code ?? '—') : (row.linkUrl ?? '—')}
+        </span>
+      ),
+    },
+    {
+      header: 'Expires',
+      headerClassName: 'w-28',
+      cellClassName: 'w-28 text-xs whitespace-nowrap',
+      cell: row => row.expiresAt ? (
+        <span className={new Date(row.expiresAt) < new Date() ? 'text-red-400' : 'text-gray-500'}>
+          {new Date(row.expiresAt).toLocaleDateString()}
+        </span>
+      ) : <span className="text-gray-300">—</span>,
+    },
+    {
+      header: 'Actions',
+      headerClassName: 'text-right w-28',
+      cellClassName: 'text-right',
+      cell: row => (
+        <div className="flex items-center justify-end gap-3">
+          <Link href={`/admin/coupons/${row.id}/edit`} className="text-purple-600 hover:text-purple-800 font-medium">
+            Edit
+          </Link>
+          <DeleteButton action={deleteCoupon.bind(null, row.id)} label="Delete" />
+        </div>
+      ),
+    },
+  ]
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Coupons</h1>
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Coupons</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{total.toLocaleString()} total coupons</p>
+        </div>
         <Link
           href="/admin/coupons/new"
           className="px-4 py-2 bg-purple-700 text-white rounded-lg text-sm font-medium hover:bg-purple-800 transition-colors"
@@ -32,60 +143,45 @@ export default async function AdminCouponsPage() {
         </Link>
       </div>
 
-      {allCoupons.length === 0 ? (
-        <div className="bg-white rounded-xl border border-purple-100 p-8 text-center text-gray-400">
-          No coupons yet.{' '}
-          <Link href="/admin/coupons/new" className="text-purple-600 hover:underline">
-            Create your first coupon
-          </Link>
-        </div>
-      ) : (
-        <div className="bg-white rounded-xl border border-purple-100 shadow-sm overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-purple-50 text-purple-800 text-left">
-              <tr>
-                <th className="px-4 py-3 font-semibold">Title</th>
-                <th className="px-4 py-3 font-semibold">Store</th>
-                <th className="px-4 py-3 font-semibold">Type</th>
-                <th className="px-4 py-3 font-semibold">Code / Link</th>
-                <th className="px-4 py-3 font-semibold">Expires</th>
-                <th className="px-4 py-3 font-semibold text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {allCoupons.map((coupon) => (
-                <tr key={coupon.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 font-medium text-gray-800">{coupon.title}</td>
-                  <td className="px-4 py-3 text-gray-600">{coupon.storeName ?? '—'}</td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-block text-xs font-semibold px-2 py-0.5 rounded-full ${coupon.type === 'copy' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
-                      {coupon.type === 'copy' ? 'Copy Code' : 'Direct Link'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-gray-500 max-w-xs truncate">
-                    {coupon.type === 'copy' ? coupon.code ?? '—' : coupon.linkUrl ?? '—'}
-                  </td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">
-                    {coupon.expiresAt ? new Date(coupon.expiresAt).toLocaleDateString() : '—'}
-                  </td>
-                  <td className="px-4 py-3 text-right flex items-center justify-end gap-2">
-                    <Link
-                      href={`/admin/coupons/${coupon.id}/edit`}
-                      className="text-purple-600 hover:text-purple-800 font-medium"
-                    >
-                      Edit
-                    </Link>
-                    <DeleteButton
-                      action={deleteCoupon.bind(null, coupon.id)}
-                      label="Delete"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <Suspense>
+        <ListFilters
+          totalItems={total}
+          searchPlaceholder="Search by title…"
+          filters={[
+            {
+              key: 'type',
+              label: 'Type',
+              options: [
+                { value: 'copy', label: 'Copy Code' },
+                { value: 'link', label: 'Direct Link' },
+              ],
+            },
+            {
+              key: 'store',
+              label: 'Store',
+              options: allStores.map(s => ({ value: String(s.id), label: s.name })),
+            },
+          ]}
+        />
+      </Suspense>
+
+      <DataTable
+        columns={columns}
+        rows={rows}
+        getKey={r => r.id}
+        emptyText="No coupons match your filters."
+        emptyHref="/admin/coupons/new"
+        emptyLinkLabel="Create one"
+      />
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        totalItems={total}
+        pageSize={PAGE_SIZE}
+        basePath="/admin/coupons"
+        currentParams={currentParams}
+      />
     </div>
   )
 }
