@@ -43,39 +43,39 @@ function slugify(str: string): string {
 // ─── Static data pools ────────────────────────────────────────────────────────
 
 const STORE_LIST = [
-  { name: 'Amazon',          slug: 'amazon',         imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg' },
-  { name: 'Nike',            slug: 'nike',           imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg' },
-  { name: 'Walmart',         slug: 'walmart',        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Walmart_Spark.svg' },
-  { name: 'Target',          slug: 'target',         imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Target_logo.svg' },
-  { name: 'Best Buy',        slug: 'best-buy',       imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f5/Best_Buy_Logo.svg' },
-  { name: 'Adidas',          slug: 'adidas',         imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg' },
-  { name: 'eBay',            slug: 'ebay',           imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/48/EBay_logo.png' },
-  { name: 'Sephora',         slug: 'sephora',        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Sephora_Logo.png' },
-  { name: 'H&M',             slug: 'hm',             imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/53/H%26M-Logo.svg' },
-  { name: 'ZARA',            slug: 'zara',           imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg' },
-  { name: 'Apple',           slug: 'apple',          imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg' },
-  { name: 'Samsung',         slug: 'samsung',        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg' },
-  { name: 'Costco',          slug: 'costco',         imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/59/Costco_Wholesale_logo_2010-10-26.svg' },
-  { name: 'Home Depot',      slug: 'home-depot',     imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/TheHomeDepot.svg' },
-  { name: 'IKEA',            slug: 'ikea',           imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Ikea_logo.svg' },
-  { name: 'Nordstrom',       slug: 'nordstrom',      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Nordstrom_logo.svg' },
-  { name: 'Macy\'s',         slug: 'macys',          imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/63/Macy%27s_New_2019_Logo.svg' },
-  { name: 'Gap',             slug: 'gap',            imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Gap_logo.svg' },
-  { name: 'Old Navy',        slug: 'old-navy',       imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/32/Old_Navy_logo.svg' },
-  { name: 'Wayfair',         slug: 'wayfair',        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Wayfair_logo.svg' },
+  { name: 'Amazon', slug: 'amazon', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg' },
+  { name: 'Nike', slug: 'nike', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg' },
+  { name: 'Walmart', slug: 'walmart', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/14/Walmart_Spark.svg' },
+  { name: 'Target', slug: 'target', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Target_logo.svg' },
+  { name: 'Best Buy', slug: 'best-buy', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f5/Best_Buy_Logo.svg' },
+  { name: 'Adidas', slug: 'adidas', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg' },
+  { name: 'eBay', slug: 'ebay', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/48/EBay_logo.png' },
+  { name: 'Sephora', slug: 'sephora', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Sephora_Logo.png' },
+  { name: 'H&M', slug: 'hm', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/53/H%26M-Logo.svg' },
+  { name: 'ZARA', slug: 'zara', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg' },
+  { name: 'Apple', slug: 'apple', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg' },
+  { name: 'Samsung', slug: 'samsung', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg' },
+  { name: 'Costco', slug: 'costco', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/59/Costco_Wholesale_logo_2010-10-26.svg' },
+  { name: 'Home Depot', slug: 'home-depot', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/TheHomeDepot.svg' },
+  { name: 'IKEA', slug: 'ikea', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Ikea_logo.svg' },
+  { name: 'Nordstrom', slug: 'nordstrom', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/ba/Nordstrom_logo.svg' },
+  { name: 'Macy\'s', slug: 'macys', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/63/Macy%27s_New_2019_Logo.svg' },
+  { name: 'Gap', slug: 'gap', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Gap_logo.svg' },
+  { name: 'Old Navy', slug: 'old-navy', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/32/Old_Navy_logo.svg' },
+  { name: 'Wayfair', slug: 'wayfair', imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Wayfair_logo.svg' },
 ]
 
 // Coupon template pools
-const DISCOUNT_AMOUNTS   = [5, 10, 15, 20, 25, 30, 40, 50]
-const PCT_DISCOUNTS      = [5, 10, 15, 20, 25, 30, 40, 50, 60, 70]
-const MIN_ORDER_AMOUNTS  = [25, 35, 50, 75, 100, 150, 200]
+const DISCOUNT_AMOUNTS = [5, 10, 15, 20, 25, 30, 40, 50]
+const PCT_DISCOUNTS = [5, 10, 15, 20, 25, 30, 40, 50, 60, 70]
+const MIN_ORDER_AMOUNTS = [25, 35, 50, 75, 100, 150, 200]
 const CATEGORIES = [
   'Electronics', 'Clothing', 'Shoes', 'Home Decor', 'Groceries',
   'Beauty', 'Furniture', 'Toys', 'Sports', 'Kitchen', 'Garden', 'Books',
 ]
 
-const CODE_PREFIXES  = ['SAVE', 'GET', 'DEAL', 'OFF', 'VIP', 'FLASH', 'HOT', 'BIG', 'MEGA', 'SUPER']
-const CODE_SUFFIXES  = ['NOW', 'TODAY', 'WEEK', 'DEAL', 'GO', 'YES', 'WIN', 'FLY', 'MAX', 'PRO']
+const CODE_PREFIXES = ['SAVE', 'GET', 'DEAL', 'OFF', 'VIP', 'FLASH', 'HOT', 'BIG', 'MEGA', 'SUPER']
+// const CODE_SUFFIXES  = ['NOW', 'TODAY', 'WEEK', 'DEAL', 'GO', 'YES', 'WIN', 'FLY', 'MAX', 'PRO']
 
 function randomCode(storeName: string): string {
   const abbr = storeName.replace(/[^A-Z]/g, '').slice(0, 3).toUpperCase() || 'STR'
@@ -184,12 +184,12 @@ const BLOG_TEMPLATES: Array<{
   featured: boolean
   image: string
 }> = [
-  {
-    featured: true,
-    image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800',
-    titleFn: s => `${s} Coupon Codes That Actually Work This Month`,
-    excerptFn: s => `We tested every ${s} promo code floating around the internet. Here are the ones that are live and verified right now.`,
-    contentFn: s => `Finding working coupon codes for ${s} can feel like a full-time job. Half the codes you find online are expired, store-specific, or just plain fake. We did the dirty work so you don't have to.
+    {
+      featured: true,
+      image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800',
+      titleFn: s => `${s} Coupon Codes That Actually Work This Month`,
+      excerptFn: s => `We tested every ${s} promo code floating around the internet. Here are the ones that are live and verified right now.`,
+      contentFn: s => `Finding working coupon codes for ${s} can feel like a full-time job. Half the codes you find online are expired, store-specific, or just plain fake. We did the dirty work so you don't have to.
 
 ## How We Verify Codes
 
@@ -226,13 +226,13 @@ ${s} tends to release new codes around:
 Before you even enter a code, click through a cash back portal like Rakuten or Honey. You'll earn 2–8% back on top of your coupon savings. Over a year, this compounds significantly.
 
 Bookmark this page — we update our ${s} codes daily.`,
-  },
-  {
-    featured: false,
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
-    titleFn: s => `Is ${s}'s Loyalty Program Worth It? Our Honest Review`,
-    excerptFn: s => `Loyalty programs promise big rewards but often underdeliver. We put ${s}'s program through its paces to find out if it's actually worth your time.`,
-    contentFn: s => `${s} runs one of the more recognizable loyalty programs in retail, but does it actually deliver value? After six months of testing, here's our honest assessment.
+    },
+    {
+      featured: false,
+      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
+      titleFn: s => `Is ${s}'s Loyalty Program Worth It? Our Honest Review`,
+      excerptFn: s => `Loyalty programs promise big rewards but often underdeliver. We put ${s}'s program through its paces to find out if it's actually worth your time.`,
+      contentFn: s => `${s} runs one of the more recognizable loyalty programs in retail, but does it actually deliver value? After six months of testing, here's our honest assessment.
 
 ## The Basics
 
@@ -270,13 +270,13 @@ If you're already spending $500+ at ${s} annually, hitting mid-tier status is wo
 **Use as primary loyalty focus**: Probably not — better returns elsewhere.
 
 The sweet spot is combining the ${s} loyalty program with a cash back credit card and shopping during member events. That combination can push your effective savings to 6–8%.`,
-  },
-  {
-    featured: true,
-    image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800',
-    titleFn: s => `${s} Black Friday 2026: Everything We Know So Far`,
-    excerptFn: s => `Black Friday at ${s} is one of the most anticipated shopping events of the year. Here's what to expect and how to prepare.`,
-    contentFn: s => `Black Friday 2026 is shaping up to be a massive event for ${s} shoppers. Based on historical patterns and early signals, here's our preview of what to expect.
+    },
+    {
+      featured: true,
+      image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800',
+      titleFn: s => `${s} Black Friday 2026: Everything We Know So Far`,
+      excerptFn: s => `Black Friday at ${s} is one of the most anticipated shopping events of the year. Here's what to expect and how to prepare.`,
+      contentFn: s => `Black Friday 2026 is shaping up to be a massive event for ${s} shoppers. Based on historical patterns and early signals, here's our preview of what to expect.
 
 ## When Does It Start?
 
@@ -320,13 +320,13 @@ Focus your Black Friday ${s} shopping on:
 3. Gift purchases — the holiday timing is perfect
 
 Stay tuned to BargainsVault for live updates as Black Friday 2026 approaches.`,
-  },
-  {
-    featured: false,
-    image: 'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800',
-    titleFn: s => `5 Things You Didn't Know You Could Save On at ${s}`,
-    excerptFn: s => `Most shoppers only scratch the surface of what ${s} offers. These five hidden savings opportunities are hiding in plain sight.`,
-    contentFn: s => `You probably know the basics of saving at ${s} — sale sections, promo codes, loyalty points. But these five tricks go deeper and can unlock savings most shoppers never access.
+    },
+    {
+      featured: false,
+      image: 'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800',
+      titleFn: s => `5 Things You Didn't Know You Could Save On at ${s}`,
+      excerptFn: s => `Most shoppers only scratch the surface of what ${s} offers. These five hidden savings opportunities are hiding in plain sight.`,
+      contentFn: s => `You probably know the basics of saving at ${s} — sale sections, promo codes, loyalty points. But these five tricks go deeper and can unlock savings most shoppers never access.
 
 ## 1. The Price Adjustment Window
 
@@ -357,13 +357,13 @@ ${s} sells returned and lightly used items at significant discounts through thei
 Before placing a large order, open a live chat with ${s} customer service and mention you found a competitor price or that you're a long-time customer. Agents have discretionary discount codes they can apply — typically 5–10%. It takes two minutes and works more often than you'd think.
 
 Stack any of these with a verified BargainsVault code and you're looking at compounded savings that add up fast.`,
-  },
-  {
-    featured: false,
-    image: 'https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=800',
-    titleFn: s => `${s} vs Competitors: Who Has the Best Deals Right Now?`,
-    excerptFn: s => `We compared ${s}'s current pricing and promotions against its top competitors to see where your money goes furthest.`,
-    contentFn: s => `With so many retailers competing for your wallet, it pays to compare before you buy. We put ${s} up against its closest competitors across five key categories.
+    },
+    {
+      featured: false,
+      image: 'https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=800',
+      titleFn: s => `${s} vs Competitors: Who Has the Best Deals Right Now?`,
+      excerptFn: s => `We compared ${s}'s current pricing and promotions against its top competitors to see where your money goes furthest.`,
+      contentFn: s => `With so many retailers competing for your wallet, it pays to compare before you buy. We put ${s} up against its closest competitors across five key categories.
 
 ## Methodology
 
@@ -409,8 +409,8 @@ ${s} regularly sells discounted gift cards for restaurants, streaming services, 
 ${s} offers the best value in clothing and home goods, and is competitive in electronics thanks to price matching. Where it lags is in grocery/essentials pricing versus Walmart and Amazon.
 
 **Smart strategy**: Use ${s} for apparel and home goods with a coupon code, and shop Walmart or Amazon for staples. Check BargainsVault for whichever has the better active code before each purchase.`,
-  },
-]
+    },
+  ]
 
 // Blog topics not tied to a specific store
 const GENERIC_BLOG_TEMPLATES: Array<{
@@ -421,13 +421,13 @@ const GENERIC_BLOG_TEMPLATES: Array<{
   image: string
   content: string
 }> = [
-  {
-    title: 'The Best Cash Back Credit Cards for Shoppers in 2026',
-    slug: 'best-cash-back-credit-cards-2026',
-    excerpt: 'Pair the right credit card with your coupon strategy and you can earn 5–10% back on nearly every purchase.',
-    featured: true,
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
-    content: `Credit cards are the invisible layer on top of every coupon strategy. The right card turns a 20% coupon into a 24% discount. Here are the best cash back cards for active deal-seekers in 2026.
+    {
+      title: 'The Best Cash Back Credit Cards for Shoppers in 2026',
+      slug: 'best-cash-back-credit-cards-2026',
+      excerpt: 'Pair the right credit card with your coupon strategy and you can earn 5–10% back on nearly every purchase.',
+      featured: true,
+      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
+      content: `Credit cards are the invisible layer on top of every coupon strategy. The right card turns a 20% coupon into a 24% discount. Here are the best cash back cards for active deal-seekers in 2026.
 
 ## The Gold Standard: Chase Freedom Flex
 
@@ -465,14 +465,14 @@ The pro move is using multiple cards:
 Cash back cards only add value if you pay your balance in full every month. Carrying a balance at 20%+ APR wipes out years of rewards in months.
 
 **The formula**: Promo code + cash back portal + cash back credit card = 15–25% effective savings on almost any purchase.`,
-  },
-  {
-    title: 'How Price Tracking Tools Can Save You Hundreds Per Year',
-    slug: 'price-tracking-tools-save-hundreds',
-    excerpt: 'Never overpay again. These free price tracking tools alert you the moment prices drop to your target.',
-    featured: false,
-    image: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800',
-    content: `Price tracking tools are the most underutilized weapon in a deal-seeker's arsenal. Set them up once and they work silently in the background, alerting you when it's time to buy.
+    },
+    {
+      title: 'How Price Tracking Tools Can Save You Hundreds Per Year',
+      slug: 'price-tracking-tools-save-hundreds',
+      excerpt: 'Never overpay again. These free price tracking tools alert you the moment prices drop to your target.',
+      featured: false,
+      image: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800',
+      content: `Price tracking tools are the most underutilized weapon in a deal-seeker's arsenal. Set them up once and they work silently in the background, alerting you when it's time to buy.
 
 ## Why Prices Fluctuate So Much
 
@@ -516,14 +516,14 @@ A $349 air fryer was tracked for 6 weeks. During a flash sale it hit $218 — a 
 Price tracking rewards patience. Items regularly cycle through discounts of 20–40%. For non-urgent purchases, setting an alert and waiting almost always results in a better price than buying at discovery.
 
 Combine tracking with BargainsVault coupon codes and you're capturing both the price floor and an additional percentage off.`,
-  },
-  {
-    title: 'Cyber Monday 2026: The Complete Survival Guide',
-    slug: 'cyber-monday-2026-survival-guide',
-    excerpt: 'Cyber Monday is the biggest online shopping day of the year. Here\'s how to navigate it without overspending or missing the real deals.',
-    featured: true,
-    image: 'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800',
-    content: `Cyber Monday 2026 lands on November 30th. The internet will be flooded with "deals" — most of which are just normal prices with a holiday label. Here's how to cut through the noise.
+    },
+    {
+      title: 'Cyber Monday 2026: The Complete Survival Guide',
+      slug: 'cyber-monday-2026-survival-guide',
+      excerpt: 'Cyber Monday is the biggest online shopping day of the year. Here\'s how to navigate it without overspending or missing the real deals.',
+      featured: true,
+      image: 'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800',
+      content: `Cyber Monday 2026 lands on November 30th. The internet will be flooded with "deals" — most of which are just normal prices with a holiday label. Here's how to cut through the noise.
 
 ## The Reality of Cyber Monday
 
@@ -567,14 +567,14 @@ Add every item on your list to a price tracker today. By Cyber Monday, you'll ha
 ## The Golden Rule
 
 If you don't need it before December 26th, wait. January clearance sales often beat Cyber Monday prices on many categories, and the crowds are gone.`,
-  },
-  {
-    title: 'How to Never Pay Full Price: A System for Chronic Overpayers',
-    slug: 'never-pay-full-price-system',
-    excerpt: 'Full price is for people without a system. Here\'s the complete workflow that ensures you always buy at the lowest possible price.',
-    featured: false,
-    image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800',
-    content: `Paying full retail price is almost always optional. With the right workflow, you can consistently pay 15–40% less on virtually every non-emergency purchase. Here's the system.
+    },
+    {
+      title: 'How to Never Pay Full Price: A System for Chronic Overpayers',
+      slug: 'never-pay-full-price-system',
+      excerpt: 'Full price is for people without a system. Here\'s the complete workflow that ensures you always buy at the lowest possible price.',
+      featured: false,
+      image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800',
+      content: `Paying full retail price is almost always optional. With the right workflow, you can consistently pay 15–40% less on virtually every non-emergency purchase. Here's the system.
 
 ## The Core Principle
 
@@ -622,14 +622,14 @@ Applying this system consistently to a typical household's discretionary spendin
 - Price timing: ~$400 saved (5%)
 
 **Total: ~$1,160/year** — roughly 14.5% off all discretionary spending, in exchange for about 2–3 minutes per purchase.`,
-  },
-  {
-    title: 'The Psychology of Sales: Why We Buy Things We Don\'t Need',
-    slug: 'psychology-of-sales-why-we-overspend',
-    excerpt: 'Retailers spend billions engineering environments that make us spend more. Understanding the psychology helps you fight back.',
-    featured: false,
-    image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800',
-    content: `Every design decision in a retail environment — physical or digital — is optimized to get you to spend more. Understanding these techniques is the first step to resisting them.
+    },
+    {
+      title: 'The Psychology of Sales: Why We Buy Things We Don\'t Need',
+      slug: 'psychology-of-sales-why-we-overspend',
+      excerpt: 'Retailers spend billions engineering environments that make us spend more. Understanding the psychology helps you fight back.',
+      featured: false,
+      image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800',
+      content: `Every design decision in a retail environment — physical or digital — is optimized to get you to spend more. Understanding these techniques is the first step to resisting them.
 
 ## The Anchoring Effect
 
@@ -666,8 +666,8 @@ Expiring coupons are particularly effective because loss aversion is twice as po
 Deals, discounts, and coupons are genuinely useful tools — when applied to things you already need or want. The goal isn't to avoid sales, it's to make sure the purchase decision came before the discount, not because of it.
 
 Use BargainsVault to save on purchases you've already decided to make. That's the healthy version of deal-seeking.`,
-  },
-]
+    },
+  ]
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
@@ -680,26 +680,26 @@ async function main() {
   const adminPassword = 'Admin@123!'
 
   const testUsers = [
-    { email: 'editor@bargainsvault.com',    password: 'Editor@123!' },
-    { email: 'writer@bargainsvault.com',    password: 'Writer@123!' },
+    { email: 'editor@bargainsvault.com', password: 'Editor@123!' },
+    { email: 'writer@bargainsvault.com', password: 'Writer@123!' },
     { email: 'moderator@bargainsvault.com', password: 'Mod@123!' },
-    { email: 'john.doe@example.com',        password: 'John@123!' },
-    { email: 'jane.smith@example.com',      password: 'Jane@123!' },
-    { email: 'alice@example.com',           password: 'Alice@123!' },
-    { email: 'bob@example.com',             password: 'Bob@123!' },
-    { email: 'carol@example.com',           password: 'Carol@123!' },
-    { email: 'david@example.com',           password: 'David@123!' },
-    { email: 'eva@example.com',             password: 'Eva@123!' },
-    { email: 'frank@example.com',           password: 'Frank@123!' },
-    { email: 'grace@example.com',           password: 'Grace@123!' },
-    { email: 'henry@example.com',           password: 'Henry@123!' },
-    { email: 'iris@example.com',            password: 'Iris@123!' },
-    { email: 'jack@example.com',            password: 'Jack@123!' },
-    { email: 'karen@example.com',           password: 'Karen@123!' },
-    { email: 'leo@example.com',             password: 'Leo@123!' },
-    { email: 'mia@example.com',             password: 'Mia@123!' },
-    { email: 'noah@example.com',            password: 'Noah@123!' },
-    { email: 'olivia@example.com',          password: 'Olivia@123!' },
+    { email: 'john.doe@example.com', password: 'John@123!' },
+    { email: 'jane.smith@example.com', password: 'Jane@123!' },
+    { email: 'alice@example.com', password: 'Alice@123!' },
+    { email: 'bob@example.com', password: 'Bob@123!' },
+    { email: 'carol@example.com', password: 'Carol@123!' },
+    { email: 'david@example.com', password: 'David@123!' },
+    { email: 'eva@example.com', password: 'Eva@123!' },
+    { email: 'frank@example.com', password: 'Frank@123!' },
+    { email: 'grace@example.com', password: 'Grace@123!' },
+    { email: 'henry@example.com', password: 'Henry@123!' },
+    { email: 'iris@example.com', password: 'Iris@123!' },
+    { email: 'jack@example.com', password: 'Jack@123!' },
+    { email: 'karen@example.com', password: 'Karen@123!' },
+    { email: 'leo@example.com', password: 'Leo@123!' },
+    { email: 'mia@example.com', password: 'Mia@123!' },
+    { email: 'noah@example.com', password: 'Noah@123!' },
+    { email: 'olivia@example.com', password: 'Olivia@123!' },
   ]
 
   const allUserData = [
@@ -777,7 +777,7 @@ async function main() {
     const picked = pickN(BLOG_TEMPLATES, 2)
     for (const tpl of picked) {
       const title = tpl.titleFn(store.name)
-      let slug = slugify(title)
+      const slug = slugify(title)
       // Ensure uniqueness
       let attempt = slug
       let counter = 2

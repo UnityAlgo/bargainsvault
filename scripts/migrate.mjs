@@ -11,7 +11,6 @@ if (!process.env.DATABASE_URL) {
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 const db = drizzle(pool)
 
-// process.cwd() is the app root whether run locally or inside Docker
 const migrationsFolder = join(process.cwd(), 'drizzle')
 
 try {

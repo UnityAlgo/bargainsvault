@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 import { db } from '@/lib/db'
 import { blogs, stores, coupons } from '@/lib/db/schema'
