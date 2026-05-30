@@ -79,3 +79,14 @@ export async function deleteCoupon(id: number) {
   revalidatePath('/', 'layout')
   revalidatePath('/admin/coupons')
 }
+
+export async function reorderCoupons(orderedIds: number[]) {
+  await requireAdmin()
+  await Promise.all(
+    orderedIds.map((id, index) =>
+      db.update(coupons).set({ sortOrder: index }).where(eq(coupons.id, id))
+    )
+  )
+  revalidatePath('/')
+  revalidatePath('/admin/coupons')
+}

@@ -5,18 +5,25 @@ import { usePathname } from 'next/navigation'
 import { logout } from '@/lib/actions/auth'
 
 const navItems = [
-  { href: '/admin',         label: 'Dashboard', exact: true },
-  { href: '/admin/blogs',   label: 'Blogs',     exact: false },
-  { href: '/admin/stores',  label: 'Stores',    exact: false },
-  { href: '/admin/coupons', label: 'Coupons',   exact: false },
-  { href: '/admin/users',   label: 'Users',     exact: false },
+  { href: '/admin',                label: 'Dashboard',   exact: true,  indent: false },
+  { href: '/admin/carousel',       label: 'Carousel',    exact: false, indent: false },
+  { href: '/admin/products',       label: 'Products',    exact: false, indent: false },
+  { href: '/admin/blogs',          label: 'Blogs',       exact: false, indent: false },
+  { href: '/admin/stores',         label: 'Stores',         exact: false, indent: false },
+  { href: '/admin/stores/sort',    label: '↕ Sort Stores',  exact: false, indent: true  },
+  { href: '/admin/coupons',        label: 'Coupons',        exact: false, indent: false },
+  { href: '/admin/coupons/sort',   label: '↕ Sort Coupons', exact: false, indent: true  },
+  { href: '/admin/users',          label: 'Users',       exact: false, indent: false },
 ]
 
 export default function AdminSidebar() {
   const pathname = usePathname()
 
   function isActive(href: string, exact: boolean) {
-    return exact ? pathname === href : pathname.startsWith(href)
+    if (exact) return pathname === href
+    if (href.endsWith('/sort')) return pathname === href
+    // Parent links (Stores, Coupons) should not highlight when on their /sort sub-page
+    return pathname.startsWith(href) && !pathname.startsWith(href + '/sort')
   }
 
   return (
@@ -29,11 +36,11 @@ export default function AdminSidebar() {
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1 text-sm">
-        {navItems.map(({ href, label, exact }) => (
+        {navItems.map(({ href, label, exact, indent }) => (
           <Link
             key={href}
             href={href}
-            className={`flex items-center px-3 py-2 rounded-lg transition-colors ${
+            className={`flex items-center px-3 py-2 rounded-lg transition-colors ${indent ? 'ml-3 text-[13px]' : ''} ${
               isActive(href, exact)
                 ? 'bg-purple-700 text-white font-semibold'
                 : 'text-purple-200 hover:bg-purple-800 hover:text-white'

@@ -19,6 +19,7 @@ export const stores = pgTable('stores', {
   name: text('name').notNull(),
   slug: text('slug').notNull().unique(),
   imageUrl: text('image_url'),
+  sortOrder: integer('sort_order').default(0).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
@@ -47,6 +48,25 @@ export const coupons = pgTable('coupons', {
   code: text('code'),       // for 'copy' type
   linkUrl: text('link_url'), // for 'link' type
   expiresAt: timestamp('expires_at'),
+  sortOrder: integer('sort_order').default(0).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+export const carouselImages = pgTable('carousel_images', {
+  id: serial('id').primaryKey(),
+  imageUrl: text('image_url').notNull(),
+  title: text('title'),
+  linkUrl: text('link_url'),
+  sortOrder: integer('sort_order').default(0).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+export const products = pgTable('products', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  imageUrl: text('image_url'),
+  price: text('price').notNull(),
+  sortOrder: integer('sort_order').default(0).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
@@ -54,6 +74,10 @@ export type User = typeof users.$inferSelect
 export type Store = typeof stores.$inferSelect
 export type Blog = typeof blogs.$inferSelect
 export type Coupon = typeof coupons.$inferSelect
+export type CarouselImage = typeof carouselImages.$inferSelect
+export type Product = typeof products.$inferSelect
 export type NewStore = typeof stores.$inferInsert
 export type NewBlog = typeof blogs.$inferInsert
 export type NewCoupon = typeof coupons.$inferInsert
+export type NewCarouselImage = typeof carouselImages.$inferInsert
+export type NewProduct = typeof products.$inferInsert

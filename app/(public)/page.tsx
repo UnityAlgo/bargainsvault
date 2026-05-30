@@ -2,15 +2,18 @@ export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
 import { db } from '@/lib/db'
-import { blogs, stores } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { blogs, stores, carouselImages, products, coupons } from '@/lib/db/schema'
+import { eq, asc } from 'drizzle-orm'
+import Carousel from '@/app/_components/Carousel'
 
 export default async function HomePage() {
-  const [featuredBlogs, allStores] = await Promise.all([
+  const [featuredBlogs, allStores, carouselImgs, allProducts, allCoupons] = await Promise.all([
     db.select().from(blogs).where(eq(blogs.featured, true)).limit(6),
-    db.select().from(stores).limit(12),
+    db.select().from(stores).orderBy(asc(stores.sortOrder), asc(stores.name)).limit(12),
+    db.select().from(carouselImages).orderBy(asc(carouselImages.sortOrder), asc(carouselImages.createdAt)),
+    db.select().from(products).orderBy(asc(products.sortOrder), asc(products.createdAt)).limit(12),
+    db.select().from(coupons).orderBy(asc(coupons.sortOrder), asc(coupons.createdAt)).limit(6),
   ])
-
 
   return (
     <div className="max-w-6xl mx-auto px-5 py-8 space-y-10">
@@ -22,6 +25,11 @@ export default async function HomePage() {
           Exclusive coupons, verified discount codes, and deals from top stores.
         </p>
       </div>
+
+      {/* ── Carousel ────────────────────────────── */}
+      {carouselImgs.length > 0 && (
+        <Carousel images={carouselImgs} />
+      )}
 
       {/* ── Featured layout ─────────────────────── */}
       {(allStores.length > 0 || featuredBlogs.length > 0) && (
@@ -108,6 +116,38 @@ export default async function HomePage() {
         </div>
       )}
 
+      {/* ── Products ────────────────────────────── */}
+      {allProducts.length > 0 && (
+        <section className="animate-fade-in-up delay-150">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-bold text-text">Featured Products</h2>
+          </div>
+          <div className="stagger-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {allProducts.map((product) => (
+              <div
+                key={product.id}
+                className="flex flex-col items-center gap-2.5 p-4 bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+              >
+                {product.imageUrl ? (
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="w-12 h-12 object-contain rounded-lg"
+                  />
+                ) : (
+                  <div className="w-12 h-12 bg-brand-light rounded-lg flex items-center justify-center text-brand font-bold text-lg">
+                    {product.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="text-[11px] font-medium text-muted text-center leading-tight">
+                  {product.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* ── Popular Stores ───────────────────────── */}
       {allStores.length > 0 && (
         <section className="animate-fade-in-up delay-200">
@@ -136,6 +176,42 @@ export default async function HomePage() {
                   {store.name}
                 </span>
               </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Latest Coupons ───────────────────────── */}
+      {allCoupons.length > 0 && (
+        <section className="animate-fade-in-up delay-250">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-bold text-text">Latest Coupons</h2>
+          </div>
+          <div className="stagger-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {allCoupons.map((coupon) => (
+              <div
+                key={coupon.id}
+                className="bg-surface rounded-xl border border-border p-4 flex flex-col gap-2 hover:border-brand/30 hover:shadow-sm transition-all duration-150"
+              >
+                <p className="font-semibold text-sm text-text line-clamp-2 leading-snug">{coupon.title}</p>
+                {coupon.description && (
+                  <p className="text-xs text-muted line-clamp-2 leading-relaxed">{coupon.description}</p>
+                )}
+                <div className="flex items-center justify-between mt-auto pt-1">
+                  {coupon.type === 'copy' && coupon.code ? (
+                    <span className="font-mono text-xs bg-tag-bg text-tag-text px-2.5 py-1 rounded-lg font-semibold tracking-wide">
+                      {coupon.code}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-muted italic">Direct link</span>
+                  )}
+                  {coupon.expiresAt && (
+                    <span className={`text-[10px] font-medium ${new Date(coupon.expiresAt) < new Date() ? 'text-red-400' : 'text-muted'}`}>
+                      {new Date(coupon.expiresAt) < new Date() ? 'Expired' : `Expires ${new Date(coupon.expiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
+                    </span>
+                  )}
+                </div>
+              </div>
             ))}
           </div>
         </section>
