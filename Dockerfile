@@ -30,6 +30,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/public       ./public
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/drizzle      ./drizzle
 
+# Ensure uploads directory exists (volume will mount here)
+RUN mkdir -p ./public/uploads && chown nextjs:nodejs ./public/uploads
+
 # Install only production dependencies (fresh, correct platform binaries)
 COPY --from=builder --chown=nextjs:nodejs /app/package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
