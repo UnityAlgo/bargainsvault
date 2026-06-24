@@ -123,60 +123,46 @@ export default async function HomePage() {
             <h2 className="text-base font-bold text-text">Featured Products</h2>
           </div>
           <div className="stagger-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {allProducts.map((product) => (
-              <div
-                key={product.id}
-                className="flex flex-col items-center gap-2.5 p-4 bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
-              >
-                {product.imageUrl ? (
-                  <img
-                    src={product.imageUrl}
-                    alt={product.name}
-                    className="w-12 h-12 object-contain rounded-lg"
-                  />
-                ) : (
-                  <div className="w-12 h-12 bg-brand-light rounded-lg flex items-center justify-center text-brand font-bold text-lg">
-                    {product.name.charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <span className="text-[11px] font-medium text-muted text-center leading-tight">
-                  {product.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ── Popular Stores ───────────────────────── */}
-      {allStores.length > 0 && (
-        <section className="animate-fade-in-up delay-200">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-bold text-text">Popular Stores</h2>
-          </div>
-          <div className="stagger-grid grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-            {allStores.map((store) => (
-              <Link
-                key={store.id}
-                href={`/${store.slug}/view/vouchers`}
-                className="group flex flex-col items-center gap-2.5 p-4 bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
-              >
-                {store.imageUrl ? (
-                  <img
-                    src={store.imageUrl}
-                    alt={store.name}
-                    className="w-10 h-10 object-contain rounded-lg"
-                  />
-                ) : (
-                  <div className="w-10 h-10 bg-brand-light rounded-lg flex items-center justify-center text-brand font-bold text-base">
-                    {store.name.charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <span className="text-[11px] font-medium text-muted text-center leading-tight group-hover:text-text transition-colors">
-                  {store.name}
-                </span>
-              </Link>
-            ))}
+            {allProducts.map((product) => {
+              const card = (
+                <div className="flex flex-col items-center gap-2.5 p-4 bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 w-full">
+                  {product.imageUrl ? (
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-12 h-12 object-contain rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-brand-light rounded-lg flex items-center justify-center text-brand font-bold text-lg">
+                      {product.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <span className="text-[11px] font-medium text-muted text-center leading-tight">
+                    {product.name}
+                  </span>
+                  {product.price && (
+                    <span className="text-[11px] font-bold text-brand text-center">
+                      {product.price}
+                    </span>
+                  )}
+                </div>
+              )
+              return product.linkUrl ? (
+                <a
+                  key={product.id}
+                  href={product.linkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center"
+                >
+                  {card}
+                </a>
+              ) : (
+                <div key={product.id} className="flex flex-col items-center">
+                  {card}
+                </div>
+              )
+            })}
           </div>
         </section>
       )}

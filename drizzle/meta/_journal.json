@@ -15,6 +15,13 @@
       "when": 1776173350220,
       "tag": "0001_aromatic_jimmy_woo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750420800000,
+      "tag": "0002_add_missing_tables",
+      "breakpoints": true
     }
   ]
 }

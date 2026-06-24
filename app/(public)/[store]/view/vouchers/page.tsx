@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { db } from '@/lib/db'
 import { stores, coupons } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, ilike, and, asc, type SQL } from 'drizzle-orm'
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import CouponCard from './CouponCard'
+import CouponsFilter from './CouponsFilter'
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -14,10 +16,17 @@ export const metadata: Metadata = {
 
 interface Props {
   params: Promise<{ store: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-export default async function StoreVouchersPage({ params }: Props) {
+function str(v: string | string[] | undefined): string {
+  return Array.isArray(v) ? (v[0] ?? '') : (v ?? '')
+}
+
+export default async function StoreVouchersPage({ params, searchParams }: Props) {
   const { store: storeSlug } = await params
+  const sp = await searchParams
+  const q = str(sp.q)
 
   const [store] = await db
     .select()
@@ -27,10 +36,13 @@ export default async function StoreVouchersPage({ params }: Props) {
 
   if (!store) notFound()
 
-  const storeCoupons = await db
-    .select()
-    .from(coupons)
-    .where(eq(coupons.storeId, store.id))
+  const conditions: SQL[] = [eq(coupons.storeId, store.id)]
+  if (q) conditions.push(ilike(coupons.title, `%${q}%`))
+
+  const [storeCoupons, allStores] = await Promise.all([
+    db.select().from(coupons).where(and(...conditions)),
+    db.select().from(stores).orderBy(asc(stores.name)),
+  ])
 
   return (
     <div className="max-w-3xl mx-auto px-5 py-8">
@@ -66,6 +78,11 @@ export default async function StoreVouchersPage({ params }: Props) {
         </div>
       </div>
 
+      {/* Filter panel */}
+      <Suspense>
+        <CouponsFilter stores={allStores} currentStoreSlug={storeSlug} currentQ={q} />
+      </Suspense>
+
       {/* Coupon list */}
       {storeCoupons.length === 0 ? (
         <div className="text-center py-16 bg-surface rounded-xl border border-border">
@@ -75,7 +92,7 @@ export default async function StoreVouchersPage({ params }: Props) {
               <path d="M12 2l2.09 4.26L19 7.27l-3.5 3.41.68 5.32L12 13.77l-4.18 2.23.68-5.32L5 7.27l4.91-1.01L12 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <p className="text-sm font-medium text-muted">No coupons available yet.</p>
+          <p className="text-sm font-medium text-muted">No coupons found{q ? ` for "${q}"` : ''}.</p>
           <p className="text-xs text-muted/60 mt-1">Check back soon for fresh deals.</p>
         </div>
       ) : (

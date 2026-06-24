@@ -33,7 +33,7 @@ export async function createCoupon(formData: FormData) {
     description: description || null,
     type,
     code: type === 'copy' ? code || null : null,
-    linkUrl: type === 'link' ? linkUrl || null : null,
+    linkUrl: linkUrl || null,
     expiresAt: expiresAt ? new Date(expiresAt) : null,
   })
 
@@ -64,7 +64,7 @@ export async function updateCoupon(id: number, formData: FormData) {
       description: description || null,
       type,
       code: type === 'copy' ? code || null : null,
-      linkUrl: type === 'link' ? linkUrl || null : null,
+      linkUrl: linkUrl || null,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
     })
     .where(eq(coupons.id, id))

@@ -33,7 +33,18 @@ export default function ProductForm({ action, defaultValues }: Props) {
           className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="e.g. $29.99"
         />
-        <p className="text-xs text-gray-400 mt-1">Price is stored but not shown on the public home page.</p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Affiliate / Store URL</label>
+        <input
+          name="linkUrl"
+          type="url"
+          defaultValue={defaultValues?.linkUrl ?? ''}
+          className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+          placeholder="https://store.com/product"
+        />
+        <p className="text-xs text-gray-400 mt-1">Clicking the product on the homepage redirects here.</p>
       </div>
 
       <div className="flex gap-3 pt-2">

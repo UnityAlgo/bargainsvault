@@ -68,10 +68,21 @@ export default function CouponCard({ coupon }: { coupon: Coupon }) {
           {coupon.type === 'copy' ? (
             !revealed ? (
               <button
-                onClick={() => setRevealed(true)}
+                onClick={() => {
+                  setRevealed(true)
+                  if (coupon.code) {
+                    navigator.clipboard.writeText(coupon.code).then(() => {
+                      setCopied(true)
+                      setTimeout(() => setCopied(false), 2000)
+                    })
+                  }
+                  if (coupon.linkUrl) {
+                    window.open(coupon.linkUrl, '_blank', 'noopener,noreferrer')
+                  }
+                }}
                 className="px-4 py-2 bg-brand text-white rounded-lg text-xs font-semibold hover:bg-brand-hover transition-colors duration-150 hover:scale-[1.02] active:scale-[0.98]"
               >
-                Reveal Code
+                Get Code
               </button>
             ) : (
               <div className="flex items-center gap-2 animate-reveal-pop">

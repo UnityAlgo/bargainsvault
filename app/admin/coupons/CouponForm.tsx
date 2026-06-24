@@ -78,6 +78,20 @@ export default function CouponForm({ action, defaultValues, stores }: Props) {
         </div>
       )}
 
+      {type === 'copy' && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Store Redirect URL</label>
+          <input
+            name="linkUrl"
+            type="url"
+            defaultValue={defaultValues?.linkUrl ?? ''}
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            placeholder="https://store.com"
+          />
+          <p className="text-xs text-gray-400 mt-1">When clicked, code is auto-copied and user is redirected here.</p>
+        </div>
+      )}
+
       {type === 'link' && (
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Offer URL</label>
