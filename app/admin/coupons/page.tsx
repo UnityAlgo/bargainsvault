@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { db } from '@/lib/db'
 import { coupons, stores } from '@/lib/db/schema'
-import { desc, ilike, eq, and, count, type SQL } from 'drizzle-orm'
+import { desc, ilike, eq, and, gte, lte, count, type SQL } from 'drizzle-orm'
 import DeleteButton from '@/app/_components/DeleteButton'
 import { deleteCoupon } from '@/lib/actions/coupons'
 import ListFilters from '../_components/ListFilters'
@@ -21,16 +21,22 @@ function str(v: string | string[] | undefined): string {
 
 export default async function AdminCouponsPage({ searchParams }: PageProps) {
   const sp      = await searchParams
-  const q       = str(sp.q)
-  const type    = str(sp.type)     // '' | 'copy' | 'link'
-  const storeId = str(sp.store)    // '' | '<id>'
-  const page    = Math.max(1, parseInt(str(sp.page) || '1'))
+  const q           = str(sp.q)
+  const type        = str(sp.type)        // '' | 'copy' | 'link'
+  const storeId     = str(sp.store)       // '' | '<id>'
+  const code        = str(sp.code)
+  const expiresFrom = str(sp.expiresFrom) // 'YYYY-MM-DD'
+  const expiresTo   = str(sp.expiresTo)   // 'YYYY-MM-DD'
+  const page        = Math.max(1, parseInt(str(sp.page) || '1'))
 
   // Build WHERE conditions
   const conditions: SQL[] = []
   if (q)                   conditions.push(ilike(coupons.title, `%${q}%`))
   if (type === 'copy' || type === 'link') conditions.push(eq(coupons.type, type))
   if (storeId)             conditions.push(eq(coupons.storeId, parseInt(storeId)))
+  if (code)                conditions.push(ilike(coupons.code, `%${code}%`))
+  if (expiresFrom)         conditions.push(gte(coupons.expiresAt, new Date(expiresFrom)))
+  if (expiresTo)            conditions.push(lte(coupons.expiresAt, new Date(`${expiresTo}T23:59:59`)))
 
   const where = conditions.length ? and(...conditions) : undefined
 
@@ -170,6 +176,10 @@ export default async function AdminCouponsPage({ searchParams }: PageProps) {
               options: allStores.map(s => ({ value: String(s.id), label: s.name })),
             },
           ]}
+          textFilters={[
+            { key: 'code', label: 'Code', placeholder: 'e.g. SAVE20' },
+          ]}
+          dateRangeFilter={{ fromKey: 'expiresFrom', toKey: 'expiresTo', label: 'Expires' }}
         />
       </Suspense>
 

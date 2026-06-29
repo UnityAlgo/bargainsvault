@@ -5,14 +5,16 @@ import { db } from '@/lib/db'
 import { blogs, stores, carouselImages, products, coupons } from '@/lib/db/schema'
 import { eq, asc } from 'drizzle-orm'
 import Carousel from '@/app/_components/Carousel'
+import { getSettings } from '@/lib/actions/settings'
 
 export default async function HomePage() {
-  const [featuredBlogs, allStores, carouselImgs, allProducts, allCoupons] = await Promise.all([
+  const [featuredBlogs, allStores, carouselImgs, allProducts, allCoupons, { showVouchers, showProducts }] = await Promise.all([
     db.select().from(blogs).where(eq(blogs.featured, true)).limit(6),
     db.select().from(stores).orderBy(asc(stores.sortOrder), asc(stores.name)).limit(12),
     db.select().from(carouselImages).orderBy(asc(carouselImages.sortOrder), asc(carouselImages.createdAt)),
     db.select().from(products).orderBy(asc(products.sortOrder), asc(products.createdAt)).limit(12),
     db.select().from(coupons).orderBy(asc(coupons.sortOrder), asc(coupons.createdAt)).limit(6),
+    getSettings(),
   ])
 
   return (
@@ -32,7 +34,7 @@ export default async function HomePage() {
       )}
 
       {/* ── Featured layout ─────────────────────── */}
-      {(allStores.length > 0 || featuredBlogs.length > 0) && (
+      {showVouchers && (allStores.length > 0 || featuredBlogs.length > 0) && (
         <div className="grid lg:grid-cols-[1fr_320px] gap-5 animate-fade-in-up delay-100">
 
           {/* Left: big featured card */}
@@ -116,8 +118,41 @@ export default async function HomePage() {
         </div>
       )}
 
+      {/* ── Popular Stores ──────────────────────── */}
+      {showVouchers && allStores.length > 0 && (
+        <section className="animate-fade-in-up delay-150">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-bold text-text">Popular Stores</h2>
+          </div>
+          <div className="stagger-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {allStores.map((store) => (
+              <Link
+                key={store.id}
+                href={`/${store.slug}/view/vouchers`}
+                className="flex flex-col items-center gap-2.5 p-4 bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+              >
+                {store.imageUrl ? (
+                  <img
+                    src={store.imageUrl}
+                    alt={store.name}
+                    className="w-12 h-12 object-contain rounded-lg"
+                  />
+                ) : (
+                  <div className="w-12 h-12 bg-brand-light rounded-lg flex items-center justify-center text-brand font-bold text-lg">
+                    {store.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="text-[11px] font-medium text-muted text-center leading-tight">
+                  {store.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* ── Products ────────────────────────────── */}
-      {allProducts.length > 0 && (
+      {showProducts && allProducts.length > 0 && (
         <section className="animate-fade-in-up delay-150">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base font-bold text-text">Featured Products</h2>
@@ -168,7 +203,7 @@ export default async function HomePage() {
       )}
 
       {/* ── Latest Coupons ───────────────────────── */}
-      {allCoupons.length > 0 && (
+      {showVouchers && allCoupons.length > 0 && (
         <section className="animate-fade-in-up delay-250">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base font-bold text-text">Latest Coupons</h2>

@@ -14,13 +14,27 @@ export interface FilterDef {
   options: FilterOption[]
 }
 
+export interface TextFilterDef {
+  key: string
+  label: string
+  placeholder?: string
+}
+
+export interface DateRangeFilterDef {
+  fromKey: string
+  toKey: string
+  label: string
+}
+
 interface Props {
   filters?: FilterDef[]
+  textFilters?: TextFilterDef[]
+  dateRangeFilter?: DateRangeFilterDef
   searchPlaceholder?: string
   totalItems: number
 }
 
-export default function ListFilters({ filters = [], searchPlaceholder = 'Searchâ€¦', totalItems }: Props) {
+export default function ListFilters({ filters = [], textFilters = [], dateRangeFilter, searchPlaceholder = 'Searchâ€¦', totalItems }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -56,10 +70,22 @@ export default function ListFilters({ filters = [], searchPlaceholder = 'Searchâ
     }, 350)
   }
 
+  // Debounced text filter (e.g. Code)
+  function handleTextFilter(key: string, value: string) {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      navigate({ [key]: value })
+    }, 350)
+  }
+
   // Cleanup debounce on unmount
   useEffect(() => () => { if (debounceRef.current) clearTimeout(debounceRef.current) }, [])
 
-  const hasActiveFilters = currentQ || filters.some(f => searchParams.has(f.key))
+  const hasActiveFilters =
+    currentQ ||
+    filters.some(f => searchParams.has(f.key)) ||
+    textFilters.some(f => searchParams.has(f.key)) ||
+    (dateRangeFilter && (searchParams.has(dateRangeFilter.fromKey) || searchParams.has(dateRangeFilter.toKey)))
 
   function clearAll() {
     startTransition(() => router.replace(pathname))
@@ -106,6 +132,44 @@ export default function ListFilters({ filters = [], searchPlaceholder = 'Searchâ
             </select>
           </div>
         ))}
+
+        {/* Text filters */}
+        {textFilters.map(filter => (
+          <div key={filter.key} className="flex items-center gap-1.5">
+            <label className="text-xs font-semibold text-gray-500 whitespace-nowrap">
+              {filter.label}:
+            </label>
+            <input
+              type="text"
+              defaultValue={searchParams.get(filter.key) ?? ''}
+              onChange={e => handleTextFilter(filter.key, e.target.value)}
+              placeholder={filter.placeholder}
+              className="text-sm border border-gray-300 rounded-lg px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+            />
+          </div>
+        ))}
+
+        {/* Date range filter */}
+        {dateRangeFilter && (
+          <div className="flex items-center gap-1.5">
+            <label className="text-xs font-semibold text-gray-500 whitespace-nowrap">
+              {dateRangeFilter.label}:
+            </label>
+            <input
+              type="date"
+              value={searchParams.get(dateRangeFilter.fromKey) ?? ''}
+              onChange={e => navigate({ [dateRangeFilter.fromKey]: e.target.value })}
+              className="text-sm border border-gray-300 rounded-lg px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+            />
+            <span className="text-xs text-gray-400">to</span>
+            <input
+              type="date"
+              value={searchParams.get(dateRangeFilter.toKey) ?? ''}
+              onChange={e => navigate({ [dateRangeFilter.toKey]: e.target.value })}
+              className="text-sm border border-gray-300 rounded-lg px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+            />
+          </div>
+        )}
 
         {/* Clear all */}
         {hasActiveFilters && (

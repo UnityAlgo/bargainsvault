@@ -14,6 +14,7 @@ const navItems = [
   { href: '/admin/coupons',        label: 'Coupons',        exact: false, indent: false },
   { href: '/admin/coupons/sort',   label: '↕ Sort Coupons', exact: false, indent: true  },
   { href: '/admin/users',          label: 'Users',       exact: false, indent: false },
+  { href: '/admin/settings',       label: 'UI Settings', exact: false, indent: false },
 ]
 
 export default function AdminSidebar() {

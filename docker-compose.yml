@@ -29,11 +29,10 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       NODE_ENV: production
     volumes:
-      - uploads_data:/app/public/uploads
+      - /var/www/bargainsvault/uploads:/app/public/uploads
     depends_on:
       db:
         condition: service_healthy
 
 volumes:
   postgres_data:
-  uploads_data:

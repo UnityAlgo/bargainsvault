@@ -71,6 +71,12 @@ export const products = pgTable('products', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
+export const settings = pgTable('settings', {
+  id: serial('id').primaryKey(),
+  key: text('key').notNull().unique(),
+  value: text('value').notNull(),
+})
+
 export type User = typeof users.$inferSelect
 export type Store = typeof stores.$inferSelect
 export type Blog = typeof blogs.$inferSelect
@@ -82,3 +88,4 @@ export type NewBlog = typeof blogs.$inferInsert
 export type NewCoupon = typeof coupons.$inferInsert
 export type NewCarouselImage = typeof carouselImages.$inferInsert
 export type NewProduct = typeof products.$inferInsert
+export type Setting = typeof settings.$inferSelect
