@@ -21,12 +21,12 @@ export default async function HomePage() {
     <div className="max-w-6xl mx-auto px-5 py-8 space-y-10">
 
       {/* ── Page header ─────────────────────────── */}
-      <div className="animate-fade-in-up">
-        <h1 className="text-2xl font-bold text-text tracking-tight">Browse Our Resources</h1>
-        <p className="text-muted text-sm mt-1">
-          Exclusive coupons, verified discount codes, and deals from top stores.
-        </p>
-      </div>
+      {/* <div className="animate-fade-in-up"> */}
+      {/*   <h1 className="text-2xl font-bold text-text tracking-tight">Browse Our Resources</h1> */}
+      {/*   <p className="text-muted text-sm mt-1"> */}
+      {/*     Exclusive coupons, verified discount codes, and deals from top stores. */}
+      {/*   </p> */}
+      {/* </div> */}
 
       {/* ── Carousel ────────────────────────────── */}
       {carouselImgs.length > 0 && (

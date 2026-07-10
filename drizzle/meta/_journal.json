@@ -29,6 +29,13 @@
       "when": 1782707263345,
       "tag": "0003_confused_salo",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1782800000000,
+      "tag": "0004_add_product_link_url",
+      "breakpoints": true
     }
   ]
 }
