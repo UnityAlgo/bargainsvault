@@ -6,13 +6,18 @@ type Props = {
   label?: string
   defaultValue?: string | null
   required?: boolean
+  /** Prefix for form field names. Defaults to 'image' → fields: imageUrl / imageFile */
+  fieldPrefix?: string
 }
 
 export default function ImageUploadInput({
   label = 'Image',
   defaultValue,
   required = false,
+  fieldPrefix = 'image',
 }: Props) {
+  const urlFieldName = `${fieldPrefix}Url`
+  const fileFieldName = `${fieldPrefix}File`
   const [mode, setMode] = useState<'url' | 'file'>('url')
   const [urlValue, setUrlValue] = useState(defaultValue ?? '')
   const [preview, setPreview] = useState<string | null>(defaultValue ?? null)
@@ -66,7 +71,7 @@ export default function ImageUploadInput({
 
       {mode === 'url' ? (
         <input
-          name="imageUrl"
+          name={urlFieldName}
           type="url"
           value={urlValue}
           required={required}
@@ -78,7 +83,7 @@ export default function ImageUploadInput({
       ) : (
         <>
           {/* Clear the URL field so the action uses the file */}
-          <input name="imageUrl" type="hidden" value="" />
+          <input name={urlFieldName} type="hidden" value="" />
           <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-colors bg-gray-50">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-gray-400 mb-1">
               <path d="M12 16V8m0 0-3 3m3-3 3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -87,7 +92,7 @@ export default function ImageUploadInput({
             <span className="text-xs text-gray-500">Click to choose a file</span>
             <span className="text-[10px] text-gray-400 mt-0.5">PNG, JPG, WebP, SVG</span>
             <input
-              name="imageFile"
+              name={fileFieldName}
               type="file"
               accept="image/*"
               required={required}

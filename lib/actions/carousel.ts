@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { carouselImages } from '@/lib/db/schema'
 import { getSession } from '@/lib/auth'
-import { resolveImageUrl } from '@/lib/upload'
+import { resolveImageUrl, resolveNamedImageUrl } from '@/lib/upload'
 
 async function requireAdmin() {
   const session = await getSession()
@@ -19,6 +19,8 @@ export async function createCarouselImage(formData: FormData) {
   const imageUrl = await resolveImageUrl(formData)
   if (!imageUrl) return { error: 'Image is required' }
 
+  const mobileImageUrl = await resolveNamedImageUrl(formData, 'mobileImage')
+
   const title = formData.get('title') as string
   const linkUrl = formData.get('linkUrl') as string
   const existing = await db.select({ sortOrder: carouselImages.sortOrder }).from(carouselImages)
@@ -26,6 +28,7 @@ export async function createCarouselImage(formData: FormData) {
 
   await db.insert(carouselImages).values({
     imageUrl,
+    mobileImageUrl: mobileImageUrl || null,
     title: title || null,
     linkUrl: linkUrl || null,
     sortOrder: maxOrder + 1,

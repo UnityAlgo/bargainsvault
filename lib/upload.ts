@@ -13,15 +13,17 @@ export async function saveUploadedFile(file: File): Promise<string> {
   return `/uploads/${filename}`
 }
 
-/**
- * Reads imageFile (uploaded file) or imageUrl (text) from FormData and returns
- * the resolved URL to store in the DB. Returns null if neither was provided.
- */
 export async function resolveImageUrl(formData: FormData): Promise<string | null> {
-  const file = formData.get('imageFile') as File | null
+  return resolveNamedImageUrl(formData, '')
+}
+
+export async function resolveNamedImageUrl(formData: FormData, prefix: string): Promise<string | null> {
+  const fileKey = prefix ? `${prefix}File` : 'imageFile'
+  const urlKey = prefix ? `${prefix}Url` : 'imageUrl'
+  const file = formData.get(fileKey) as File | null
   if (file && file.size > 0) {
     return saveUploadedFile(file)
   }
-  const url = formData.get('imageUrl') as string
+  const url = formData.get(urlKey) as string
   return url || null
 }

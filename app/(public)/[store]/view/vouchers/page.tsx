@@ -6,9 +6,9 @@ import { db } from '@/lib/db'
 import { stores, coupons } from '@/lib/db/schema'
 import { eq, ilike, and, asc, type SQL } from 'drizzle-orm'
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
+// import { Suspense } from 'react'
 import CouponCard from './CouponCard'
-import CouponsFilter from './CouponsFilter'
+// import CouponsFilter from './CouponsFilter'
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -39,7 +39,7 @@ export default async function StoreVouchersPage({ params, searchParams }: Props)
   const conditions: SQL[] = [eq(coupons.storeId, store.id)]
   if (q) conditions.push(ilike(coupons.title, `%${q}%`))
 
-  const [storeCoupons, allStores] = await Promise.all([
+  const [storeCoupons, allSallStorestores] = await Promise.all([
     db.select().from(coupons).where(and(...conditions)),
     db.select().from(stores).orderBy(asc(stores.name)),
   ])
@@ -79,9 +79,9 @@ export default async function StoreVouchersPage({ params, searchParams }: Props)
       </div>
 
       {/* Filter panel */}
-      <Suspense>
+      {/* <Suspense>
         <CouponsFilter stores={allStores} currentStoreSlug={storeSlug} currentQ={q} />
-      </Suspense>
+      </Suspense> */}
 
       {/* Coupon list */}
       {storeCoupons.length === 0 ? (

@@ -55,6 +55,7 @@ export const coupons = pgTable('coupons', {
 export const carouselImages = pgTable('carousel_images', {
   id: serial('id').primaryKey(),
   imageUrl: text('image_url').notNull(),
+  mobileImageUrl: text('mobile_image_url'),
   title: text('title'),
   linkUrl: text('link_url'),
   sortOrder: integer('sort_order').default(0).notNull(),

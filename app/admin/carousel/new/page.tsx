@@ -11,7 +11,12 @@ export default function NewCarouselImagePage() {
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Add Carousel Image</h1>
       <form action={action} encType="multipart/form-data" className="bg-white rounded-xl border border-purple-100 shadow-sm p-6 space-y-5 max-w-lg">
 
-        <ImageUploadInput label="Carousel Image *" required />
+        <ImageUploadInput label="Desktop / Tablet Image *" required />
+
+        <ImageUploadInput
+          label="Mobile Image (optional — shown on small screens)"
+          fieldPrefix="mobileImage"
+        />
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Title (optional)</label>

@@ -53,7 +53,7 @@ export default async function BlogDetailPage({ params }: Props) {
 
       {blog.featuredImage && (
         <div className="rounded-xl overflow-hidden border border-border mb-8">
-          <img src={blog.featuredImage} alt={blog.title} className="w-full h-72 object-cover" />
+          <img src={blog.featuredImage} alt={blog.title} className="w-full h-72 object-contain md:object-cover" />
         </div>
       )}
 

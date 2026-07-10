@@ -32,11 +32,16 @@ export default function Carousel({ images }: { images: CarouselImage[] }) {
           {images.map((img) => {
             const slide = (
               <div className="relative w-full overflow-hidden rounded-2xl h-52 md:h-64 lg:h-72">
-                <img
-                  src={img.imageUrl}
-                  alt={img.title ?? ''}
-                  className="w-full h-full object-cover"
-                />
+                <picture className="w-full h-full">
+                  {img.mobileImageUrl && (
+                    <source media="(max-width: 767px)" srcSet={img.mobileImageUrl} />
+                  )}
+                  <img
+                    src={img.imageUrl}
+                    alt={img.title ?? ''}
+                    className="w-full h-full object-contain md:object-cover"
+                  />
+                </picture>
                 {img.title && (
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-5 py-4 rounded-b-2xl">
                     <p className="text-white font-semibold text-sm">{img.title}</p>
