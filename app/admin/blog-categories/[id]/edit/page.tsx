@@ -11,7 +11,8 @@ export default async function EditBlogCategoryPage({ params }: { params: Promise
 
   if (!cat) notFound()
 
-  const action = updateBlogCategory.bind(null, cat.id)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const action = updateBlogCategory.bind(null, cat.id) as (formData: FormData) => Promise<any>
 
   return (
     <div>
