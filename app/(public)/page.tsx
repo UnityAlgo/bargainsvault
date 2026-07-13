@@ -2,18 +2,21 @@ export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
 import { db } from '@/lib/db'
-import { blogs, stores, carouselImages, products, coupons } from '@/lib/db/schema'
-import { eq, asc } from 'drizzle-orm'
+import { blogs, stores, carouselImages, products, coupons, blogCategories } from '@/lib/db/schema'
+import { eq, asc, desc, sql } from 'drizzle-orm'
 import Carousel from '@/app/_components/Carousel'
+import ProductCarousel from '@/app/_components/ProductCarousel'
 import { getSettings } from '@/lib/actions/settings'
 
 export default async function HomePage() {
-  const [featuredBlogs, allStores, carouselImgs, allProducts, allCoupons, { showVouchers, showProducts }] = await Promise.all([
+  const [featuredBlogs, latestBlogs, allStores, carouselImgs, allProducts, allCoupons, allCategories, { showVouchers, showProducts }] = await Promise.all([
     db.select().from(blogs).where(eq(blogs.featured, true)).limit(6),
+    db.select().from(blogs).orderBy(desc(sql`COALESCE(${blogs.publishedAt}, ${blogs.createdAt})`)).limit(6),
     db.select().from(stores).orderBy(asc(stores.sortOrder), asc(stores.name)).limit(12),
     db.select().from(carouselImages).orderBy(asc(carouselImages.sortOrder), asc(carouselImages.createdAt)),
-    db.select().from(products).orderBy(asc(products.sortOrder), asc(products.createdAt)).limit(12),
+    db.select().from(products).orderBy(asc(products.sortOrder), asc(products.createdAt)).limit(20),
     db.select().from(coupons).orderBy(asc(coupons.sortOrder), asc(coupons.createdAt)).limit(6),
+    db.select().from(blogCategories).orderBy(asc(blogCategories.name)).limit(8),
     getSettings(),
   ])
 
@@ -108,7 +111,7 @@ export default async function HomePage() {
                       {blog.title}
                     </h3>
                     <p className="text-[11px] text-muted mt-1.5">
-                      {new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {new Date(blog.publishedAt ?? blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                   </div>
                 </Link>
@@ -151,54 +154,13 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── Products ────────────────────────────── */}
+      {/* ── Products carousel ───────────────────── */}
       {showProducts && allProducts.length > 0 && (
         <section className="animate-fade-in-up delay-150">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-base font-bold text-text">Featured Products</h2>
           </div>
-          <div className="stagger-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {allProducts.map((product) => {
-              const card = (
-                <div className="flex flex-col items-center gap-2.5 p-4 bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 w-full">
-                  {product.imageUrl ? (
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      className="w-12 h-12 object-contain rounded-lg"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 bg-brand-light rounded-lg flex items-center justify-center text-brand font-bold text-lg">
-                      {product.name.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <span className="text-[11px] font-medium text-muted text-center leading-tight">
-                    {product.name}
-                  </span>
-                  {product.price && (
-                    <span className="text-[11px] font-bold text-brand text-center">
-                      {product.price}
-                    </span>
-                  )}
-                </div>
-              )
-              return product.linkUrl ? (
-                <a
-                  key={product.id}
-                  href={product.linkUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col items-center"
-                >
-                  {card}
-                </a>
-              ) : (
-                <div key={product.id} className="flex flex-col items-center">
-                  {card}
-                </div>
-              )
-            })}
-          </div>
+          <ProductCarousel products={allProducts} />
         </section>
       )}
 
@@ -238,6 +200,83 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* ── Blog Categories ─────────────────────── */}
+      {allCategories.length > 0 && (
+        <section className="animate-fade-in-up delay-250">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-bold text-text">Blog Categories</h2>
+            <Link href="/blog/categories" className="text-xs text-brand font-semibold hover:underline">See all</Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {allCategories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/blog/categories/${cat.slug}`}
+                className="group bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
+              >
+                {cat.imageUrl ? (
+                  <div className="overflow-hidden h-28">
+                    <img
+                      src={cat.imageUrl}
+                      alt={cat.name}
+                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-28 bg-linear-to-br from-brand-light to-tag-bg flex items-center justify-center">
+                    <span className="text-2xl font-bold text-brand/30">{cat.name.charAt(0).toUpperCase()}</span>
+                  </div>
+                )}
+                <div className="p-3">
+                  <h3 className="text-xs font-semibold text-text group-hover:text-brand transition-colors">{cat.name}</h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Latest Blog Posts ────────────────────── */}
+      {latestBlogs.length > 0 && (
+        <section className="animate-fade-in-up delay-300">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-bold text-text">Latest Posts</h2>
+            <Link href="/blog" className="text-xs text-brand font-semibold hover:underline">Browse all</Link>
+          </div>
+          <div className="stagger-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {latestBlogs.map((blog) => {
+              const displayDate = blog.publishedAt ?? blog.createdAt
+              return (
+                <Link
+                  key={blog.id}
+                  href={`/blog/${blog.slug}`}
+                  className="group bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
+                >
+                  {blog.featuredImage ? (
+                    <div className="overflow-hidden">
+                      <img src={blog.featuredImage} alt={blog.title} className="w-full h-40 object-cover group-hover:scale-[1.03] transition-transform duration-300" />
+                    </div>
+                  ) : (
+                    <div className="w-full h-40 bg-linear-to-br from-brand-light to-tag-bg" />
+                  )}
+                  <div className="p-4 flex flex-col flex-1">
+                    <h3 className="font-semibold text-text text-sm group-hover:text-brand transition-colors line-clamp-2 leading-snug">
+                      {blog.title}
+                    </h3>
+                    {blog.excerpt && (
+                      <p className="text-xs text-muted mt-1.5 line-clamp-2 leading-relaxed flex-1">{blog.excerpt}</p>
+                    )}
+                    <p className="text-[11px] text-muted/70 mt-3 font-medium">
+                      {new Date(displayDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </p>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+      )}
+
       {/* ── Featured Articles ────────────────────── */}
       {featuredBlogs.length > 0 && (
         <section className="animate-fade-in-up delay-300">
@@ -273,7 +312,7 @@ export default async function HomePage() {
                     <p className="text-xs text-muted mt-1.5 line-clamp-2 leading-relaxed flex-1">{blog.excerpt}</p>
                   )}
                   <p className="text-[11px] text-muted/70 mt-3 font-medium">
-                    {new Date(blog.createdAt).toLocaleDateString('en-US', {
+                    {new Date(blog.publishedAt ?? blog.createdAt).toLocaleDateString('en-US', {
                       year: 'numeric', month: 'short', day: 'numeric',
                     })}
                   </p>

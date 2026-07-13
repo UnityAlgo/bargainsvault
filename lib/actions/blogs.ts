@@ -24,12 +24,14 @@ async function requireAdmin() {
 export async function createBlog(formData: FormData) {
   await requireAdmin()
 
-  const title        = formData.get('title') as string
-  const content      = formData.get('content') as string
-  const excerpt      = formData.get('excerpt') as string
+  const title         = formData.get('title') as string
+  const content       = formData.get('content') as string
+  const excerpt       = formData.get('excerpt') as string
   const featuredImage = formData.get('featuredImage') as string
-  const metaKeywords = formData.get('metaKeywords') as string
-  const featured     = formData.get('featured') === 'on'
+  const metaKeywords  = formData.get('metaKeywords') as string
+  const featured      = formData.get('featured') === 'on'
+  const categoryIdRaw = formData.get('categoryId') as string
+  const publishedAtRaw = formData.get('publishedAt') as string
 
   if (!title || !content) {
     return { error: 'Title and content are required' }
@@ -41,10 +43,12 @@ export async function createBlog(formData: FormData) {
     title,
     slug,
     content,
-    excerpt:      excerpt || null,
+    excerpt:       excerpt || null,
     featuredImage: featuredImage || null,
-    metaKeywords: metaKeywords || null,
+    metaKeywords:  metaKeywords || null,
     featured,
+    categoryId:    categoryIdRaw ? parseInt(categoryIdRaw) : null,
+    publishedAt:   publishedAtRaw ? new Date(publishedAtRaw) : null,
   })
 
   revalidatePath('/', 'layout')
@@ -55,12 +59,14 @@ export async function createBlog(formData: FormData) {
 export async function updateBlog(id: number, formData: FormData) {
   await requireAdmin()
 
-  const title        = formData.get('title') as string
-  const content      = formData.get('content') as string
-  const excerpt      = formData.get('excerpt') as string
+  const title         = formData.get('title') as string
+  const content       = formData.get('content') as string
+  const excerpt       = formData.get('excerpt') as string
   const featuredImage = formData.get('featuredImage') as string
-  const metaKeywords = formData.get('metaKeywords') as string
-  const featured     = formData.get('featured') === 'on'
+  const metaKeywords  = formData.get('metaKeywords') as string
+  const featured      = formData.get('featured') === 'on'
+  const categoryIdRaw = formData.get('categoryId') as string
+  const publishedAtRaw = formData.get('publishedAt') as string
 
   if (!title || !content) {
     return { error: 'Title and content are required' }
@@ -71,11 +77,13 @@ export async function updateBlog(id: number, formData: FormData) {
     .set({
       title,
       content,
-      excerpt:      excerpt || null,
+      excerpt:       excerpt || null,
       featuredImage: featuredImage || null,
-      metaKeywords: metaKeywords || null,
+      metaKeywords:  metaKeywords || null,
       featured,
-      updatedAt:    new Date(),
+      categoryId:    categoryIdRaw ? parseInt(categoryIdRaw) : null,
+      publishedAt:   publishedAtRaw ? new Date(publishedAtRaw) : null,
+      updatedAt:     new Date(),
     })
     .where(eq(blogs.id, id))
 

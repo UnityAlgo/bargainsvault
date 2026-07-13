@@ -29,6 +29,12 @@ export default function PublicLayout({
             >
               Blog
             </Link>
+            <Link
+              href="/blog/categories"
+              className="px-3 py-1.5 rounded-lg text-muted font-medium hover:text-text hover:bg-brand-light transition-all duration-150"
+            >
+              Categories
+            </Link>
           </nav>
         </div>
       </header>

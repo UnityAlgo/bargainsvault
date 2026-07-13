@@ -3,16 +3,20 @@
 import { useState, useRef, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import type { Blog } from '@/lib/db/schema'
+import type { Blog, BlogCategory } from '@/lib/db/schema'
 import TipTapEditor from './TipTapEditor'
 
 type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   action: (formData: FormData) => Promise<any>
   defaultValues?: Partial<Blog>
+  categories?: BlogCategory[]
 }
 
-export default function BlogForm({ action, defaultValues }: Props) {
+export default function BlogForm({ action, defaultValues, categories = [] }: Props) {
+  const defaultPublishedAt = defaultValues?.publishedAt
+    ? new Date(defaultValues.publishedAt).toISOString().slice(0, 16)
+    : ''
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -114,6 +118,33 @@ export default function BlogForm({ action, defaultValues }: Props) {
             placeholder="coupons, discount codes, deals, savings"
           />
           <p className="mt-1 text-xs text-gray-400">Comma-separated keywords added to the page's &lt;meta keywords&gt; tag</p>
+        </div>
+
+        {categories.length > 0 && (
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category</label>
+            <select
+              name="categoryId"
+              defaultValue={defaultValues?.categoryId ?? ''}
+              className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">— No category —</option>
+              {categories.map(cat => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1.5">Publish Date</label>
+          <input
+            name="publishedAt"
+            type="datetime-local"
+            defaultValue={defaultPublishedAt}
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <p className="mt-1 text-xs text-gray-400">Leave blank to use the creation date</p>
         </div>
 
         <div className="flex items-center gap-2.5">

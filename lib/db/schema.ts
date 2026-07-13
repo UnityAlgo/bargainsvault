@@ -23,6 +23,14 @@ export const stores = pgTable('stores', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
+export const blogCategories = pgTable('blog_categories', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  slug: text('slug').notNull().unique(),
+  imageUrl: text('image_url'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
 export const blogs = pgTable('blogs', {
   id: serial('id').primaryKey(),
   title: text('title').notNull(),
@@ -32,6 +40,8 @@ export const blogs = pgTable('blogs', {
   featuredImage: text('featured_image'),
   metaKeywords: text('meta_keywords'),
   featured: boolean('featured').default(false).notNull(),
+  categoryId: integer('category_id').references(() => blogCategories.id, { onDelete: 'set null' }),
+  publishedAt: timestamp('published_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
@@ -80,6 +90,7 @@ export const settings = pgTable('settings', {
 
 export type User = typeof users.$inferSelect
 export type Store = typeof stores.$inferSelect
+export type BlogCategory = typeof blogCategories.$inferSelect
 export type Blog = typeof blogs.$inferSelect
 export type Coupon = typeof coupons.$inferSelect
 export type CarouselImage = typeof carouselImages.$inferSelect

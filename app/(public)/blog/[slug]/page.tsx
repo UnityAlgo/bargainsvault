@@ -60,7 +60,7 @@ export default async function BlogDetailPage({ params }: Props) {
       {/* Meta */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
         <time className="text-xs text-muted font-medium">
-          {new Date(blog.createdAt).toLocaleDateString('en-US', {
+          {new Date(blog.publishedAt ?? blog.createdAt).toLocaleDateString('en-US', {
             year: 'numeric', month: 'long', day: 'numeric',
           })}
         </time>

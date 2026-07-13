@@ -43,6 +43,13 @@
       "when": 1783674923042,
       "tag": "0005_light_the_order",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783943601506,
+      "tag": "0006_bored_patriot",
+      "breakpoints": true
     }
   ]
 }

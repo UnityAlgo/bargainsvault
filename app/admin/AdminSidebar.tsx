@@ -8,7 +8,8 @@ const navItems = [
   { href: '/admin',                label: 'Dashboard',   exact: true,  indent: false },
   { href: '/admin/carousel',       label: 'Carousel',    exact: false, indent: false },
   { href: '/admin/products',       label: 'Products',    exact: false, indent: false },
-  { href: '/admin/blogs',          label: 'Blogs',       exact: false, indent: false },
+  { href: '/admin/blogs',           label: 'Blogs',            exact: false, indent: false },
+  { href: '/admin/blog-categories', label: '↳ Categories',     exact: false, indent: true  },
   { href: '/admin/stores',         label: 'Stores',         exact: false, indent: false },
   { href: '/admin/stores/sort',    label: '↕ Sort Stores',  exact: false, indent: true  },
   { href: '/admin/coupons',        label: 'Coupons',        exact: false, indent: false },
@@ -22,8 +23,9 @@ export default function AdminSidebar() {
 
   function isActive(href: string, exact: boolean) {
     if (exact) return pathname === href
-    if (href.endsWith('/sort')) return pathname === href
-    // Parent links (Stores, Coupons) should not highlight when on their /sort sub-page
+    if (href.endsWith('/sort') || href.endsWith('/categories')) return pathname === href || pathname.startsWith(href + '/')
+    // Parent links should not highlight when on their sub-pages
+    if (href === '/admin/blogs') return pathname.startsWith(href) && !pathname.startsWith('/admin/blog-categories')
     return pathname.startsWith(href) && !pathname.startsWith(href + '/sort')
   }
 

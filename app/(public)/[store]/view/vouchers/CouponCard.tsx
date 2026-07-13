@@ -9,6 +9,7 @@ export default function CouponCard({ coupon }: { coupon: Coupon }) {
 
   function handleCopy() {
     if (!coupon.code) return
+    
     navigator.clipboard.writeText(coupon.code).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
