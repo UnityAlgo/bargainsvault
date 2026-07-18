@@ -7,13 +7,10 @@ export default function PublicLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen bg-page-bg">
-      <header className="bg-surface border-b border-border sticky top-0 z-50  py-4">
+      <header className="bg-surface border-b border-border sticky top-0 z-50 py-2">
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <img src="/logo.png" alt="" className='w-15' />
-            <span className="font-bold text-text text-lg">
-              BargainsVault
-            </span>
+          <Link href="/" className="">
+            <img src="/logo.png" alt="" className='w-60' />
           </Link>
 
           <nav className="flex items-center gap-1 text-sm">
@@ -41,21 +38,19 @@ export default function PublicLayout({
 
       <main className="flex-1">{children}</main>
 
-      {/* ── Footer ──────────────────────────────── */}
       <footer className="border-t border-border bg-surface">
         <div className="max-w-6xl mx-auto px-5 py-10">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
             {/* Brand + description */}
             <div className="sm:col-span-2">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-5 h-5 bg-brand rounded flex items-center justify-center">
-                  <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="text-white">
-                    <rect x="1.5" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
-                    <circle cx="8" cy="8" r="1.8" stroke="currentColor" strokeWidth="1.4" />
-                  </svg>
-                </div>
-                <span className="font-semibold text-text">BargainsVault</span>
+
+              <div className="mb-3">
+                <Link href="/" className="">
+                  <img src="/logo.png" alt="" className='w-60' />
+                </Link>
               </div>
+
+
               <p className="text-xs text-muted leading-relaxed max-w-md">
                 Bargains Vault simplifies the process by offering informative, SEO-optimized blogs that help readers make smarter purchasing decisions.
               </p>

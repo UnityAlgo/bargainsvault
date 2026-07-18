@@ -23,13 +23,6 @@ export default async function HomePage() {
   return (
     <div className="max-w-6xl mx-auto px-5 py-8 space-y-10">
 
-      {/* ── Page header ─────────────────────────── */}
-      {/* <div className="animate-fade-in-up"> */}
-      {/*   <h1 className="text-2xl font-bold text-text tracking-tight">Browse Our Resources</h1> */}
-      {/*   <p className="text-muted text-sm mt-1"> */}
-      {/*     Exclusive coupons, verified discount codes, and deals from top stores. */}
-      {/*   </p> */}
-      {/* </div> */}
 
       {/* ── Carousel ────────────────────────────── */}
       {carouselImgs.length > 0 && (
@@ -200,42 +193,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── Blog Categories ─────────────────────── */}
-      {allCategories.length > 0 && (
-        <section className="animate-fade-in-up delay-250">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-bold text-text">Blog Categories</h2>
-            <Link href="/blog/categories" className="text-xs text-brand font-semibold hover:underline">See all</Link>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-            {allCategories.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/blog/categories/${cat.slug}`}
-                className="group bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
-              >
-                {cat.imageUrl ? (
-                  <div className="overflow-hidden h-28">
-                    <img
-                      src={cat.imageUrl}
-                      alt={cat.name}
-                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300"
-                    />
-                  </div>
-                ) : (
-                  <div className="h-28 bg-linear-to-br from-brand-light to-tag-bg flex items-center justify-center">
-                    <span className="text-2xl font-bold text-brand/30">{cat.name.charAt(0).toUpperCase()}</span>
-                  </div>
-                )}
-                <div className="p-3">
-                  <h3 className="text-xs font-semibold text-text group-hover:text-brand transition-colors">{cat.name}</h3>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* ── Latest Blog Posts ────────────────────── */}
       {latestBlogs.length > 0 && (
         <section className="animate-fade-in-up delay-300">
@@ -322,6 +279,44 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+
+      {/* ── Blog Categories ─────────────────────── */}
+      {allCategories.length > 0 && (
+        <section className="animate-fade-in-up delay-250">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-bold text-text">Explore More</h2>
+            <Link href="/blog/categories" className="text-xs text-brand font-semibold hover:underline">See all</Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {allCategories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/blog/categories/${cat.slug}`}
+                className="group bg-surface rounded-xl border border-border hover:border-brand/30 hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col"
+              >
+                {cat.imageUrl ? (
+                  <div className="overflow-hidden h-28">
+                    <img
+                      src={cat.imageUrl}
+                      alt={cat.name}
+                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-28 bg-linear-to-br from-brand-light to-tag-bg flex items-center justify-center">
+                    <span className="text-2xl font-bold text-brand/30">{cat.name.charAt(0).toUpperCase()}</span>
+                  </div>
+                )}
+                <div className="p-3">
+                  <h3 className="text-xs font-semibold text-text group-hover:text-brand transition-colors">{cat.name}</h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
 
     </div>
   )

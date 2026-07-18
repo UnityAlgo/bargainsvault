@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createBlogCategory } from '@/lib/actions/blog-categories'
+import ImageUploadInput from '@/app/_components/ImageUploadInput'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const action = createBlogCategory as (formData: FormData) => Promise<any>
@@ -20,15 +21,7 @@ export default function NewBlogCategoryPage() {
             placeholder="e.g. Shopping Tips"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (optional)</label>
-          <input
-            name="imageUrl"
-            type="url"
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-            placeholder="https://example.com/image.jpg"
-          />
-        </div>
+        <ImageUploadInput label="Category Image (optional)" />
         <div className="flex gap-3 pt-2">
           <button
             type="submit"

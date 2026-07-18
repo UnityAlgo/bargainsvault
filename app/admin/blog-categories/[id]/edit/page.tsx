@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { blogCategories } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { updateBlogCategory } from '@/lib/actions/blog-categories'
+import ImageUploadInput from '@/app/_components/ImageUploadInput'
 
 export default async function EditBlogCategoryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -29,19 +30,7 @@ export default async function EditBlogCategoryPage({ params }: { params: Promise
             className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (optional)</label>
-          <input
-            name="imageUrl"
-            type="url"
-            defaultValue={cat.imageUrl ?? ''}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-            placeholder="https://example.com/image.jpg"
-          />
-          {cat.imageUrl && (
-            <img src={cat.imageUrl} alt={cat.name} className="mt-2 h-16 w-auto rounded-lg border border-gray-200 object-cover" />
-          )}
-        </div>
+        <ImageUploadInput label="Category Image (optional)" defaultValue={cat.imageUrl} />
         <div className="flex gap-3 pt-2">
           <button
             type="submit"

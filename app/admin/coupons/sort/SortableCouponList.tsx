@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { reorderCoupons } from '@/lib/actions/coupons'
 
 type CouponRow = {
@@ -16,6 +16,9 @@ export default function SortableCouponList({ coupons: initial }: { coupons: Coup
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const dragIndex = useRef<number | null>(null)
+  const latestCoupons = useRef(initial)
+
+  useEffect(() => { latestCoupons.current = allCoupons }, [allCoupons])
 
   const storeNames = useMemo(() => {
     const names = allCoupons.map(c => c.storeName).filter(Boolean) as string[]
@@ -36,27 +39,37 @@ export default function SortableCouponList({ coupons: initial }: { coupons: Coup
     e.preventDefault()
     if (dragIndex.current === null || dragIndex.current === toFilteredIndex) return
 
-    const nextFiltered = [...filtered]
-    const [moved] = nextFiltered.splice(dragIndex.current, 1)
-    nextFiltered.splice(toFilteredIndex, 0, moved)
+    const fromFilteredIndex = dragIndex.current
     dragIndex.current = toFilteredIndex
 
-    // Rebuild full list: replace the slots occupied by filtered items in order
-    const filteredSlots = allCoupons
-      .map((c, i) => (isMatch(c) ? i : -1))
-      .filter(i => i !== -1)
+    // Capture filter value so functional update can use it without stale closure
+    const filter = storeFilter
 
-    const nextAll = [...allCoupons]
-    filteredSlots.forEach((allIdx, fi) => {
-      nextAll[allIdx] = nextFiltered[fi]
+    setAllCoupons(prev => {
+      const matchFn = (c: CouponRow) =>
+        !filter || c.storeName?.toLowerCase().includes(filter.toLowerCase())
+
+      const prevFiltered = prev.filter(matchFn)
+      const nextFiltered = [...prevFiltered]
+      const [moved] = nextFiltered.splice(fromFilteredIndex, 1)
+      nextFiltered.splice(toFilteredIndex, 0, moved)
+
+      const filteredSlots = prev
+        .map((c, i) => (matchFn(c) ? i : -1))
+        .filter(i => i !== -1)
+
+      const nextAll = [...prev]
+      filteredSlots.forEach((allIdx, fi) => {
+        nextAll[allIdx] = nextFiltered[fi]
+      })
+      return nextAll
     })
-    setAllCoupons(nextAll)
   }
 
   async function onDragEnd() {
     dragIndex.current = null
     setSaving(true)
-    await reorderCoupons(allCoupons.map(c => c.id))
+    await reorderCoupons(latestCoupons.current.map(c => c.id))
     setSaving(false)
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)

@@ -40,7 +40,7 @@ export default async function StoreVouchersPage({ params, searchParams }: Props)
   if (q) conditions.push(ilike(coupons.title, `%${q}%`))
 
   const [storeCoupons, allSallStorestores] = await Promise.all([
-    db.select().from(coupons).where(and(...conditions)),
+    db.select().from(coupons).where(and(...conditions)).orderBy(asc(coupons.sortOrder), asc(coupons.createdAt)),
     db.select().from(stores).orderBy(asc(stores.name)),
   ])
 

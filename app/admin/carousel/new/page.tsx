@@ -9,7 +9,7 @@ export default function NewCarouselImagePage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Add Carousel Image</h1>
-      <form action={action} encType="multipart/form-data" className="bg-white rounded-xl border border-purple-100 shadow-sm p-6 space-y-5 max-w-lg">
+      <form action={action} className="bg-white rounded-xl border border-purple-100 shadow-sm p-6 space-y-5 max-w-lg">
 
         <ImageUploadInput label="Desktop / Tablet Image *" required />
 

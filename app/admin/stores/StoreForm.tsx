@@ -10,7 +10,7 @@ type Props = {
 
 export default function StoreForm({ action, defaultValues }: Props) {
   return (
-    <form action={action} encType="multipart/form-data" className="bg-white rounded-xl border border-purple-100 shadow-sm p-6 space-y-5 max-w-lg">
+    <form action={action} className="bg-white rounded-xl border border-purple-100 shadow-sm p-6 space-y-5 max-w-lg">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Store Name *</label>
         <input

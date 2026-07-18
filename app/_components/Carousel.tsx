@@ -31,7 +31,7 @@ export default function Carousel({ images }: { images: CarouselImage[] }) {
         >
           {images.map((img) => {
             const slide = (
-              <div className="relative w-full overflow-hidden rounded-2xl h-52 md:h-64 lg:h-72">
+              <div className="relative w-full overflow-hidden rounded-2xl aspect-[1080/1350] md:aspect-auto md:h-72 lg:aspect-1920/800">
                 <picture className="w-full h-full">
                   {img.mobileImageUrl && (
                     <source media="(max-width: 767px)" srcSet={img.mobileImageUrl} />
@@ -39,7 +39,7 @@ export default function Carousel({ images }: { images: CarouselImage[] }) {
                   <img
                     src={img.imageUrl}
                     alt={img.title ?? ''}
-                    className="w-full h-full object-contain md:object-cover"
+                    className="w-full h-full"
                   />
                 </picture>
                 {img.title && (
